@@ -1,0 +1,120 @@
+{
+  "Safety & Protection": [
+    {
+      "id": "nitrile-gloves",
+      "name": "Disposable Nitrile Gloves",
+      "description": "Powder-free, latex-free nitrile gloves (Box of 100)",
+      "emoji": "🧤"
+    },
+    {
+      "id": "aprons",
+      "name": "Food Service Aprons",
+      "description": "Waterproof disposable aprons (Pack of 50)",
+      "emoji": "🦺"
+    },
+    {
+      "id": "face-masks",
+      "name": "Disposable Face Masks",
+      "description": "3-ply surgical masks (Box of 50)",
+      "emoji": "😷"
+    }
+  ],
+  "Paper Products": [
+    {
+      "id": "paper-towels",
+      "name": "Paper Towels",
+      "description": "2-ply commercial grade paper towels (12 rolls)",
+      "emoji": "🧻"
+    },
+    {
+      "id": "napkins",
+      "name": "Napkins",
+      "description": "1-ply white napkins (Pack of 500)",
+      "emoji": "🧻"
+    },
+    {
+      "id": "toilet-paper",
+      "name": "Commercial Toilet Paper",
+      "description": "2-ply toilet paper (24 rolls)",
+      "emoji": "🧻"
+    }
+  ],
+  "Food Service Items": [
+    {
+      "id": "plastic-cups",
+      "name": "Plastic Cups (16oz)",
+      "description": "Clear disposable cups (Pack of 100)",
+      "emoji": "🥤"
+    },
+    {
+      "id": "cup-lids",
+      "name": "Cup Lids",
+      "description": "16oz dome lids with straw holes (Pack of 100)",
+      "emoji": "🧊"
+    },
+    {
+      "id": "plastic-utensils",
+      "name": "Plastic Utensil Set",
+      "description": "Forks, knives, spoons combo pack (300 pieces)",
+      "emoji": "🍴"
+    },
+    {
+      "id": "disposable-plates",
+      "name": "Disposable Plates",
+      "description": "10-inch white foam plates (Pack of 50)",
+      "emoji": "🍽️"
+    },
+    {
+      "id": "takeout-containers",
+      "name": "Takeout Containers",
+      "description": "Styrofoam clamshell containers (Pack of 50)",
+      "emoji": "📦"
+    }
+  ],
+  "Cleaning Supplies": [
+    {
+      "id": "all-purpose-cleaner",
+      "name": "All-Purpose Cleaner",
+      "description": "Commercial grade surface cleaner (1 gallon)",
+      "emoji": "🧴"
+    },
+    {
+      "id": "hand-sanitizer",
+      "name": "Hand Sanitizer",
+      "description": "70% alcohol hand sanitizer (32 oz pump bottle)",
+      "emoji": "🧼"
+    },
+    {
+      "id": "heavy-sponges",
+      "name": "Heavy Duty Sponges",
+      "description": "Scrubbing sponges for kitchen use (Pack of 12)",
+      "emoji": "🧽"
+    },
+    {
+      "id": "trash-bags",
+      "name": "Trash Bags (55 gallon)",
+      "description": "Heavy duty trash bags (Box of 50)",
+      "emoji": "🚮"
+    },
+    {
+      "id": "floor-cleaner",
+      "name": "Floor Cleaner",
+      "description": "Heavy duty floor cleaner concentrate (1 gallon)",
+      "emoji": "🧽"
+    }
+  ],
+  "New Category - Kitchen Equipment": [
+    {
+      "id": "cutting-boards",
+      "name": "Plastic Cutting Boards",
+      "description": "Commercial grade cutting boards (Set of 3)",
+      "emoji": "🔪"
+    },
+    {
+      "id": "food-storage",
+      "name": "Food Storage Containers",
+      "description": "Clear plastic containers with lids (Set of 10)",
+      "emoji": "📦"
+    }
+  ]
+}
