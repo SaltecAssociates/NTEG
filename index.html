@@ -408,120 +408,8 @@
                 </div>
             </div>
 
-            <div id="productsContainer">
-                <div class="menu-section">
-                    <div class="category-title">🧤 Safety & Protection</div>
-                    
-                    <div class="product-item">
-                        <div class="product-image">🧤</div>
-                        <div class="product-info">
-                            <div class="product-name">Disposable Nitrile Gloves</div>
-                            <div class="product-description">Powder-free, latex-free nitrile gloves (Box of 100)</div>
-                        </div>
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="changeQuantity('nitrile-gloves', -1)">-</button>
-                            <div class="quantity-display" id="nitrile-gloves-qty">0</div>
-                            <button class="quantity-btn" onclick="changeQuantity('nitrile-gloves', 1)">+</button>
-                        </div>
-                    </div>
-
-                    <div class="product-item">
-                        <div class="product-image">🦺</div>
-                        <div class="product-info">
-                            <div class="product-name">Food Service Aprons</div>
-                            <div class="product-description">Waterproof disposable aprons (Pack of 50)</div>
-                        </div>
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="changeQuantity('aprons', -1)">-</button>
-                            <div class="quantity-display" id="aprons-qty">0</div>
-                            <button class="quantity-btn" onclick="changeQuantity('aprons', 1)">+</button>
-                        </div>
-                    </div>
-
-                    <div class="category-title">🧻 Paper Products</div>
-
-                    <div class="product-item">
-                        <div class="product-image">🧻</div>
-                        <div class="product-info">
-                            <div class="product-name">Paper Towels</div>
-                            <div class="product-description">2-ply commercial grade paper towels (12 rolls)</div>
-                        </div>
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="changeQuantity('paper-towels', -1)">-</button>
-                            <div class="quantity-display" id="paper-towels-qty">0</div>
-                            <button class="quantity-btn" onclick="changeQuantity('paper-towels', 1)">+</button>
-                        </div>
-                    </div>
-
-                    <div class="product-item">
-                        <div class="product-image">🧻</div>
-                        <div class="product-info">
-                            <div class="product-name">Napkins</div>
-                            <div class="product-description">1-ply white napkins (Pack of 500)</div>
-                        </div>
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="changeQuantity('napkins', -1)">-</button>
-                            <div class="quantity-display" id="napkins-qty">0</div>
-                            <button class="quantity-btn" onclick="changeQuantity('napkins', 1)">+</button>
-                        </div>
-                    </div>
-
-                    <div class="category-title">🍴 Food Service Items</div>
-
-                    <div class="product-item">
-                        <div class="product-image">🥤</div>
-                        <div class="product-info">
-                            <div class="product-name">Plastic Cups (16oz)</div>
-                            <div class="product-description">Clear disposable cups (Pack of 100)</div>
-                        </div>
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="changeQuantity('plastic-cups', -1)">-</button>
-                            <div class="quantity-display" id="plastic-cups-qty">0</div>
-                            <button class="quantity-btn" onclick="changeQuantity('plastic-cups', 1)">+</button>
-                        </div>
-                    </div>
-
-                    <div class="product-item">
-                        <div class="product-image">🍴</div>
-                        <div class="product-info">
-                            <div class="product-name">Plastic Utensil Set</div>
-                            <div class="product-description">Forks, knives, spoons combo pack (300 pieces)</div>
-                        </div>
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="changeQuantity('plastic-utensils', -1)">-</button>
-                            <div class="quantity-display" id="plastic-utensils-qty">0</div>
-                            <button class="quantity-btn" onclick="changeQuantity('plastic-utensils', 1)">+</button>
-                        </div>
-                    </div>
-
-                    <div class="category-title">🧽 Cleaning Supplies</div>
-
-                    <div class="product-item">
-                        <div class="product-image">🧴</div>
-                        <div class="product-info">
-                            <div class="product-name">All-Purpose Cleaner</div>
-                            <div class="product-description">Commercial grade surface cleaner (1 gallon)</div>
-                        </div>
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="changeQuantity('all-purpose-cleaner', -1)">-</button>
-                            <div class="quantity-display" id="all-purpose-cleaner-qty">0</div>
-                            <button class="quantity-btn" onclick="changeQuantity('all-purpose-cleaner', 1)">+</button>
-                        </div>
-                    </div>
-
-                    <div class="product-item">
-                        <div class="product-image">🧼</div>
-                        <div class="product-info">
-                            <div class="product-name">Hand Sanitizer</div>
-                            <div class="product-description">70% alcohol hand sanitizer (32 oz pump bottle)</div>
-                        </div>
-                        <div class="quantity-control">
-                            <button class="quantity-btn" onclick="changeQuantity('hand-sanitizer', -1)">-</button>
-                            <div class="quantity-display" id="hand-sanitizer-qty">0</div>
-                            <button class="quantity-btn" onclick="changeQuantity('hand-sanitizer', 1)">+</button>
-                        </div>
-                    </div>
-                </div>
+            <div id="productsContainer" class="loading">
+                Loading products from Google Sheets...
             </div>
 
             <div class="submit-section">
@@ -535,29 +423,190 @@
     </div>
 
     <script>
-        // Store quantities for each product
-        const quantities = {
-            'nitrile-gloves': 0,
-            'aprons': 0,
-            'paper-towels': 0,
-            'napkins': 0,
-            'plastic-cups': 0,
-            'plastic-utensils': 0,
-            'all-purpose-cleaner': 0,
-            'hand-sanitizer': 0
+        // Google Sheets CSV URL - Your Published CSV Link
+        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVfLKN1uuclmD0U9Cbi6_uRZYyMgODqT07r8SKMn9VS8PjRVXWV5rOgmPk-7G0kqPvcBW2uucvvpVh/pub?output=csv';
+        
+        // Store quantities and product data
+        let productsData = {};
+        let quantities = {};
+        let productNames = {};
+
+        // Default fallback products
+        const defaultProducts = {
+            "Safety & Protection": [
+                {
+                    id: "nitrile-gloves",
+                    name: "Disposable Nitrile Gloves",
+                    description: "Powder-free, latex-free nitrile gloves (Box of 100)",
+                    emoji: "🧤",
+                    imageUrl: ""
+                },
+                {
+                    id: "aprons",
+                    name: "Food Service Aprons",
+                    description: "Waterproof disposable aprons (Pack of 50)",
+                    emoji: "🦺",
+                    imageUrl: ""
+                }
+            ],
+            "Paper Products": [
+                {
+                    id: "paper-towels",
+                    name: "Paper Towels",
+                    description: "2-ply commercial grade paper towels (12 rolls)",
+                    emoji: "🧻",
+                    imageUrl: ""
+                },
+                {
+                    id: "napkins",
+                    name: "Napkins",
+                    description: "1-ply white napkins (Pack of 500)",
+                    emoji: "🧻",
+                    imageUrl: ""
+                }
+            ],
+            "Food Service Items": [
+                {
+                    id: "plastic-cups",
+                    name: "Plastic Cups (16oz)",
+                    description: "Clear disposable cups (Pack of 100)",
+                    emoji: "🥤",
+                    imageUrl: ""
+                },
+                {
+                    id: "plastic-utensils",
+                    name: "Plastic Utensil Set",
+                    description: "Forks, knives, spoons combo pack (300 pieces)",
+                    emoji: "🍴",
+                    imageUrl: ""
+                }
+            ],
+            "Cleaning Supplies": [
+                {
+                    id: "all-purpose-cleaner",
+                    name: "All-Purpose Cleaner",
+                    description: "Commercial grade surface cleaner (1 gallon)",
+                    emoji: "🧴",
+                    imageUrl: ""
+                },
+                {
+                    id: "hand-sanitizer",
+                    name: "Hand Sanitizer",
+                    description: "70% alcohol hand sanitizer (32 oz pump bottle)",
+                    emoji: "🧼",
+                    imageUrl: ""
+                }
+            ]
         };
 
-        // Product names for display
-        const productNames = {
-            'nitrile-gloves': 'Disposable Nitrile Gloves',
-            'aprons': 'Food Service Aprons',
-            'paper-towels': 'Paper Towels',
-            'napkins': 'Napkins',
-            'plastic-cups': 'Plastic Cups (16oz)',
-            'plastic-utensils': 'Plastic Utensil Set',
-            'all-purpose-cleaner': 'All-Purpose Cleaner',
-            'hand-sanitizer': 'Hand Sanitizer'
-        };
+        // Load products from Google Sheets
+        async function loadProductsFromSheets() {
+            try {
+                const response = await fetch(GOOGLE_SHEETS_CSV_URL);
+                if (!response.ok) throw new Error('Failed to fetch');
+                
+                const csvText = await response.text();
+                const productsData = parseCSVToProducts(csvText);
+                
+                // Initialize quantities and product names
+                for (const category in productsData) {
+                    productsData[category].forEach(product => {
+                        quantities[product.id] = 0;
+                        productNames[product.id] = product.name;
+                    });
+                }
+                
+                renderProducts(productsData);
+                
+            } catch (error) {
+                console.log('Using default products (Google Sheets not accessible)');
+                useDefaultProducts();
+            }
+        }
+
+        function parseCSVToProducts(csvText) {
+            const lines = csvText.trim().split('\n');
+            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            
+            const productsData = {};
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+                
+                if (values.length >= 4) {
+                    const category = values[0];
+                    const product = {
+                        id: values[1],
+                        name: values[2],
+                        description: values[3],
+                        emoji: values[4] || '📦',
+                        imageUrl: values[5] || ''
+                    };
+                    
+                    if (!productsData[category]) {
+                        productsData[category] = [];
+                    }
+                    productsData[category].push(product);
+                }
+            }
+            
+            return productsData;
+        }
+
+        function useDefaultProducts() {
+            for (const category in defaultProducts) {
+                defaultProducts[category].forEach(product => {
+                    quantities[product.id] = 0;
+                    productNames[product.id] = product.name;
+                });
+            }
+            renderProducts(defaultProducts);
+        }
+
+        function renderProducts(productsData) {
+            const container = document.getElementById('productsContainer');
+            let html = '';
+
+            for (const [categoryName, products] of Object.entries(productsData)) {
+                html += `<div class="menu-section">`;
+                html += `<div class="category-title">${getCategoryIcon(categoryName)} ${categoryName}</div>`;
+                
+                products.forEach(product => {
+                    const imageDisplay = product.imageUrl ? 
+                        `<img src="${product.imageUrl}" alt="${product.name}" onerror="this.parentElement.innerHTML='${product.emoji}'; this.parentElement.classList.add('emoji-fallback');">` : 
+                        product.emoji;
+                        
+                    html += `
+                        <div class="product-item">
+                            <div class="product-image">${imageDisplay}</div>
+                            <div class="product-info">
+                                <div class="product-name">${product.name}</div>
+                                <div class="product-description">${product.description}</div>
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', -1)">-</button>
+                                <div class="quantity-display" id="${product.id}-qty">0</div>
+                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function getCategoryIcon(categoryName) {
+            const icons = {
+                'Safety & Protection': '🧤',
+                'Paper Products': '🧻',
+                'Food Service Items': '🍴',
+                'Cleaning Supplies': '🧽'
+            };
+            return icons[categoryName] || '📦';
+        }
 
         // Phone number formatting
         function formatPhoneNumber(input) {
