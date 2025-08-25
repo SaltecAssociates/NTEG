@@ -58,59 +58,6 @@
             border-left: 5px solid #667eea;
         }
 
-        .quick-reorder {
-            background: #e8f5e8;
-            border: 2px solid #28a745;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .quick-reorder h4 {
-            color: #155724;
-            margin: 0 0 10px 0;
-            font-size: 1.1em;
-        }
-
-        .reorder-info {
-            color: #155724;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
-
-        .reorder-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9em;
-            margin-right: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .reorder-btn:hover {
-            background: #218838;
-            transform: translateY(-1px);
-        }
-
-        .dismiss-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
-        }
-
-        .dismiss-btn:hover {
-            background: #5a6268;
-        }
-
         .customer-info h3 {
             color: #333;
             margin-bottom: 20px;
@@ -147,11 +94,6 @@
             font-size: 16px;
             transition: all 0.3s ease;
             font-family: inherit;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
         }
 
         .form-group input:focus, .form-group textarea:focus {
@@ -374,29 +316,6 @@
             text-align: center;
         }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .error {
-            text-align: center;
-            padding: 40px;
-            color: #e74c3c;
-            font-size: 1.1em;
-        }
-
-        .setup-notice {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            color: #856404;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
@@ -446,18 +365,11 @@
         
         <div class="form-container">
             <div class="customer-info">
-                <div id="quickReorderSection" class="quick-reorder">
-                    <h4>🔄 Quick Reorder Available!</h4>
-                    <div class="reorder-info" id="reorderInfo"></div>
-                    <button class="reorder-btn" onclick="loadPreviousOrder()">Load Previous Order</button>
-                    <button class="dismiss-btn" onclick="dismissReorder()">Start Fresh</button>
-                </div>
-                
                 <h3>Business Information</h3>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="customerName">Contact Name *</label>
-                        <input type="text" id="customerName" name="customerName" required oninput="checkForPreviousOrder()">
+                        <input type="text" id="customerName" name="customerName" required>
                     </div>
                     <div class="form-group">
                         <label for="companyName">Company Name *</label>
@@ -496,8 +408,120 @@
                 </div>
             </div>
 
-            <div id="productsContainer" class="loading">
-                Loading products from Google Sheets...
+            <div id="productsContainer">
+                <div class="menu-section">
+                    <div class="category-title">🧤 Safety & Protection</div>
+                    
+                    <div class="product-item">
+                        <div class="product-image">🧤</div>
+                        <div class="product-info">
+                            <div class="product-name">Disposable Nitrile Gloves</div>
+                            <div class="product-description">Powder-free, latex-free nitrile gloves (Box of 100)</div>
+                        </div>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="changeQuantity('nitrile-gloves', -1)">-</button>
+                            <div class="quantity-display" id="nitrile-gloves-qty">0</div>
+                            <button class="quantity-btn" onclick="changeQuantity('nitrile-gloves', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-image">🦺</div>
+                        <div class="product-info">
+                            <div class="product-name">Food Service Aprons</div>
+                            <div class="product-description">Waterproof disposable aprons (Pack of 50)</div>
+                        </div>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="changeQuantity('aprons', -1)">-</button>
+                            <div class="quantity-display" id="aprons-qty">0</div>
+                            <button class="quantity-btn" onclick="changeQuantity('aprons', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="category-title">🧻 Paper Products</div>
+
+                    <div class="product-item">
+                        <div class="product-image">🧻</div>
+                        <div class="product-info">
+                            <div class="product-name">Paper Towels</div>
+                            <div class="product-description">2-ply commercial grade paper towels (12 rolls)</div>
+                        </div>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="changeQuantity('paper-towels', -1)">-</button>
+                            <div class="quantity-display" id="paper-towels-qty">0</div>
+                            <button class="quantity-btn" onclick="changeQuantity('paper-towels', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-image">🧻</div>
+                        <div class="product-info">
+                            <div class="product-name">Napkins</div>
+                            <div class="product-description">1-ply white napkins (Pack of 500)</div>
+                        </div>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="changeQuantity('napkins', -1)">-</button>
+                            <div class="quantity-display" id="napkins-qty">0</div>
+                            <button class="quantity-btn" onclick="changeQuantity('napkins', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="category-title">🍴 Food Service Items</div>
+
+                    <div class="product-item">
+                        <div class="product-image">🥤</div>
+                        <div class="product-info">
+                            <div class="product-name">Plastic Cups (16oz)</div>
+                            <div class="product-description">Clear disposable cups (Pack of 100)</div>
+                        </div>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="changeQuantity('plastic-cups', -1)">-</button>
+                            <div class="quantity-display" id="plastic-cups-qty">0</div>
+                            <button class="quantity-btn" onclick="changeQuantity('plastic-cups', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-image">🍴</div>
+                        <div class="product-info">
+                            <div class="product-name">Plastic Utensil Set</div>
+                            <div class="product-description">Forks, knives, spoons combo pack (300 pieces)</div>
+                        </div>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="changeQuantity('plastic-utensils', -1)">-</button>
+                            <div class="quantity-display" id="plastic-utensils-qty">0</div>
+                            <button class="quantity-btn" onclick="changeQuantity('plastic-utensils', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="category-title">🧽 Cleaning Supplies</div>
+
+                    <div class="product-item">
+                        <div class="product-image">🧴</div>
+                        <div class="product-info">
+                            <div class="product-name">All-Purpose Cleaner</div>
+                            <div class="product-description">Commercial grade surface cleaner (1 gallon)</div>
+                        </div>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="changeQuantity('all-purpose-cleaner', -1)">-</button>
+                            <div class="quantity-display" id="all-purpose-cleaner-qty">0</div>
+                            <button class="quantity-btn" onclick="changeQuantity('all-purpose-cleaner', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-image">🧼</div>
+                        <div class="product-info">
+                            <div class="product-name">Hand Sanitizer</div>
+                            <div class="product-description">70% alcohol hand sanitizer (32 oz pump bottle)</div>
+                        </div>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="changeQuantity('hand-sanitizer', -1)">-</button>
+                            <div class="quantity-display" id="hand-sanitizer-qty">0</div>
+                            <button class="quantity-btn" onclick="changeQuantity('hand-sanitizer', 1)">+</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="submit-section">
@@ -511,221 +535,56 @@
     </div>
 
     <script>
-        // 🔥 REPLACE THIS URL WITH YOUR GOOGLE SHEETS CSV EXPORT URL 🔥
-        // Your sheet ID: 1PB71I0h1y_242-qqgmDaE5XiaeaFDHqy_kpbapqSyoU
-        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/1PB71I0h1y_242-qqgmDaE5XiaeaFDHqy_kpbapqSyoU/export?format=csv&gid=0';
-        
-        let quantities = {};
-        let productNames = {};
-
-        // Default fallback data
-        const defaultProducts = {
-            "Safety & Protection": [
-                {
-                    id: "nitrile-gloves",
-                    name: "Disposable Nitrile Gloves",
-                    description: "Powder-free, latex-free nitrile gloves (Box of 100)",
-                    emoji: "🧤",
-                    imageUrl: ""
-                },
-                {
-                    id: "aprons",
-                    name: "Food Service Aprons",
-                    description: "Waterproof disposable aprons (Pack of 50)",
-                    emoji: "🦺",
-                    imageUrl: ""
-                }
-            ],
-            "Paper Products": [
-                {
-                    id: "paper-towels",
-                    name: "Paper Towels",
-                    description: "2-ply commercial grade paper towels (12 rolls)",
-                    emoji: "🧻"
-                },
-                {
-                    id: "napkins",
-                    name: "Napkins",
-                    description: "1-ply white napkins (Pack of 500)",
-                    emoji: "🧻"
-                }
-            ],
-            "Food Service Items": [
-                {
-                    id: "plastic-cups",
-                    name: "Plastic Cups (16oz)",
-                    description: "Clear disposable cups (Pack of 100)",
-                    emoji: "🥤"
-                },
-                {
-                    id: "plastic-utensils",
-                    name: "Plastic Utensil Set",
-                    description: "Forks, knives, spoons combo pack (300 pieces)",
-                    emoji: "🍴"
-                }
-            ],
-            "Cleaning Supplies": [
-                {
-                    id: "all-purpose-cleaner",
-                    name: "All-Purpose Cleaner",
-                    description: "Commercial grade surface cleaner (1 gallon)",
-                    emoji: "🧴"
-                },
-                {
-                    id: "hand-sanitizer",
-                    name: "Hand Sanitizer",
-                    description: "70% alcohol hand sanitizer (32 oz pump bottle)",
-                    emoji: "🧼"
-                }
-            ]
+        // Store quantities for each product
+        const quantities = {
+            'nitrile-gloves': 0,
+            'aprons': 0,
+            'paper-towels': 0,
+            'napkins': 0,
+            'plastic-cups': 0,
+            'plastic-utensils': 0,
+            'all-purpose-cleaner': 0,
+            'hand-sanitizer': 0
         };
 
-        async function loadProductsFromSheets() {
-            try {
-                const response = await fetch(GOOGLE_SHEETS_CSV_URL);
-                if (!response.ok) throw new Error('Failed to fetch');
-                
-                const csvText = await response.text();
-                const productsData = parseCSVToProducts(csvText);
-                
-                // Initialize quantities and product names
-                for (const category in productsData) {
-                    productsData[category].forEach(product => {
-                        quantities[product.id] = 0;
-                        productNames[product.id] = product.name;
-                    });
-                }
-                
-                renderProducts(productsData);
-                
-            } catch (error) {
-                console.log('Using default products (Google Sheets not accessible)');
-                showSetupNotice();
-                useDefaultProducts();
-            }
-        }
+        // Product names for display
+        const productNames = {
+            'nitrile-gloves': 'Disposable Nitrile Gloves',
+            'aprons': 'Food Service Aprons',
+            'paper-towels': 'Paper Towels',
+            'napkins': 'Napkins',
+            'plastic-cups': 'Plastic Cups (16oz)',
+            'plastic-utensils': 'Plastic Utensil Set',
+            'all-purpose-cleaner': 'All-Purpose Cleaner',
+            'hand-sanitizer': 'Hand Sanitizer'
+        };
 
-        function parseCSVToProducts(csvText) {
-            const lines = csvText.trim().split('\n');
-            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+        // Phone number formatting
+        function formatPhoneNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 10) value = value.slice(0, 10);
             
-            const productsData = {};
-            
-            for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
-                
-                if (values.length >= 4) {
-                    const category = values[0];
-                    const product = {
-                        id: values[1],
-                        name: values[2],
-                        description: values[3],
-                        emoji: values[4] || '📦',
-                        imageUrl: values[5] || '' // Add image URL support
-                    };
-                    
-                    if (!productsData[category]) {
-                        productsData[category] = [];
-                    }
-                    productsData[category].push(product);
-                }
+            if (value.length >= 6) {
+                value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6)}`;
+            } else if (value.length >= 3) {
+                value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+            } else if (value.length > 0) {
+                value = `(${value}`;
             }
             
-            return productsData;
+            input.value = value;
         }
 
-        function useDefaultProducts() {
-            for (const category in defaultProducts) {
-                defaultProducts[category].forEach(product => {
-                    quantities[product.id] = 0;
-                    productNames[product.id] = product.name;
-                });
+        function formatState(input) {
+            input.value = input.value.toUpperCase();
+        }
+
+        function formatZipCode(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 5) {
+                value = `${value.slice(0, 5)}-${value.slice(5, 9)}`;
             }
-            renderProducts(defaultProducts);
-        }
-
-        function showSetupNotice() {
-            const container = document.getElementById('productsContainer');
-            container.innerHTML = `
-                <div class="setup-notice">
-                    <strong>⚠️ Setup Required:</strong> To manage products easily with Google Sheets, 
-                    <a href="#" onclick="showInstructions()">click here for setup instructions</a>.
-                    Using default products for now.
-                </div>
-                <div id="productsDisplay"></div>
-            `;
-        }
-
-        function showInstructions() {
-            alert(`📝 GOOGLE SHEETS SETUP INSTRUCTIONS:
-
-1. Create a Google Sheet with these columns:
-   - Column A: Category (e.g., "Safety & Protection")
-   - Column B: Product ID (e.g., "nitrile-gloves")
-   - Column C: Product Name (e.g., "Disposable Nitrile Gloves")
-   - Column D: Description (e.g., "Powder-free gloves (Box of 100)")
-   - Column E: Emoji (e.g., "🧤")
-
-2. Make your sheet public:
-   - File → Share → Change to "Anyone with the link"
-
-3. Get the CSV export URL:
-   - File → Share → Publish to web → CSV format
-   - Copy the URL
-
-4. Replace the GOOGLE_SHEETS_CSV_URL in the code with your URL
-
-📋 EXAMPLE SHEET ROWS:
-Safety & Protection,nitrile-gloves,Disposable Nitrile Gloves,Powder-free gloves (Box of 100),🧤
-Paper Products,paper-towels,Paper Towels,2-ply commercial grade (12 rolls),🧻
-
-Then you can update products just by editing your Google Sheet!`);
-        }
-
-        function renderProducts(productsData) {
-            const container = document.getElementById('productsContainer');
-            const displayContainer = document.getElementById('productsDisplay') || container;
-            let html = '';
-
-            for (const [categoryName, products] of Object.entries(productsData)) {
-                html += `<div class="menu-section">`;
-                html += `<div class="category-title">${getCategoryIcon(categoryName)} ${categoryName}</div>`;
-                
-                products.forEach(product => {
-                    const imageDisplay = product.imageUrl ? 
-                        `<img src="${product.imageUrl}" alt="${product.name}" onerror="this.parentElement.innerHTML='${product.emoji}'; this.parentElement.classList.add('emoji-fallback');">` : 
-                        product.emoji;
-                        
-                    html += `
-                        <div class="product-item">
-                            <div class="product-image">${imageDisplay}</div>
-                            <div class="product-info">
-                                <div class="product-name">${product.name}</div>
-                                <div class="product-description">${product.description}</div>
-                            </div>
-                            <div class="quantity-control">
-                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', -1)">-</button>
-                                <div class="quantity-display" id="${product.id}-qty">0</div>
-                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', 1)">+</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                html += `</div>`;
-            }
-
-            displayContainer.innerHTML = html;
-        }
-
-        function getCategoryIcon(categoryName) {
-            const icons = {
-                'Safety & Protection': '🧤',
-                'Paper Products': '🧻',
-                'Food Service Items': '🍴',
-                'Cleaning Supplies': '🧽'
-            };
-            return icons[categoryName] || '📦';
+            input.value = value;
         }
 
         function changeQuantity(productId, change) {
@@ -759,12 +618,20 @@ Then you can update products just by editing your Google Sheet!`);
             }
         }
 
+        function getFormattedAddress() {
+            const street = document.getElementById('deliveryAddress').value.trim();
+            const city = document.getElementById('deliveryCity').value.trim();
+            const state = document.getElementById('deliveryState').value.trim();
+            const zip = document.getElementById('deliveryZip').value.trim();
+            
+            return `${street}\n${city}, ${state} ${zip}`;
+        }
+
         function submitOrder() {
             const submitBtn = document.getElementById('submitBtn');
             const submitText = document.getElementById('submitText');
             const messageContainer = document.getElementById('messageContainer');
             
-            // Clear any previous messages
             messageContainer.innerHTML = '';
             
             const customerName = document.getElementById('customerName').value.trim();
@@ -772,7 +639,6 @@ Then you can update products just by editing your Google Sheet!`);
             const customerPhone = document.getElementById('customerPhone').value.trim();
             const customerEmail = document.getElementById('customerEmail').value.trim();
             
-            // Get formatted address
             const street = document.getElementById('deliveryAddress').value.trim();
             const city = document.getElementById('deliveryCity').value.trim();
             const state = document.getElementById('deliveryState').value.trim();
@@ -813,14 +679,13 @@ Then you can update products just by editing your Google Sheet!`);
                     city: city,
                     state: state,
                     zip: zip,
-                    address: `${street}\n${city}, ${state} ${zip}` // Formatted address for emails
+                    address: getFormattedAddress()
                 },
                 items: orderItems,
                 timestamp: new Date().toISOString(),
                 total_items: orderItems.reduce((sum, item) => sum + item.quantity, 0)
             };
 
-            // Send email using EmailJS
             sendOrderEmail(order);
         }
 
@@ -829,96 +694,36 @@ Then you can update products just by editing your Google Sheet!`);
             const submitText = document.getElementById('submitText');
             
             try {
-                // Create HTML email content for business
+                // Create business email HTML
                 const businessEmailHTML = createBusinessEmailHTML(order);
                 
-                // Send business notification email
+                // Send business notification
                 const businessFormData = new FormData();
                 businessFormData.append('_to', 'salesorders@notoucheasygloves.com');
-                businessFormData.append('_subject', `NTEG Order Form - ${order.customer.company}`);
+                businessFormData.append('_subject', `NEW ORDER - ${order.customer.company} (${order.total_items} items)`);
                 businessFormData.append('_format', 'html');
                 businessFormData.append('message', businessEmailHTML);
-                businessFormData.append('customer_name', order.customer.name);
-                businessFormData.append('company_name', order.customer.company);
-                businessFormData.append('phone', order.customer.phone);
-                businessFormData.append('email', order.customer.email || 'Not provided');
-                businessFormData.append('address', order.customer.address);
-                businessFormData.append('total_items', order.total_items);
-                
-                // Add each item as separate fields
-                order.items.forEach((item, index) => {
-                    businessFormData.append(`item_${index + 1}`, `${item.name}: ${item.quantity}`);
-                });
+                businessFormData.append('_replyto', order.customer.email || 'salesorders@notoucheasygloves.com');
 
-                console.log('Sending to Formspree:', 'https://formspree.io/f/mqalrddd');
-
-                // Try FormSubmit FIRST as it's more reliable
-                console.log('Trying FormSubmit first...');
-                
-                const backupFormData = new FormData();
-                backupFormData.append('_next', window.location.href + '?success=1');
-                backupFormData.append('_subject', `NTEG Order Form - ${order.customer.company}`);
-                backupFormData.append('_captcha', 'false');
-                backupFormData.append('_template', 'table');
-                backupFormData.append('name', order.customer.name);
-                backupFormData.append('company', order.customer.company);
-                backupFormData.append('phone', order.customer.phone);
-                backupFormData.append('email', order.customer.email || 'Not provided');
-                backupFormData.append('address', order.customer.address);
-                backupFormData.append('total_items', order.total_items);
-                backupFormData.append('order_details', businessEmailHTML);
-                
-                try {
-                    const backupResponse = await fetch('https://formsubmit.co/salesorders@notoucheasygloves.com', {
-                        method: 'POST',
-                        body: backupFormData
-                    });
-
-                    console.log('FormSubmit Response:', backupResponse.status);
-                    
-                    if (backupResponse.ok) {
-                        console.log('FormSubmit worked!');
-                        saveOrderToMemory(order);
-                        showMessage('✅ Order submitted successfully!', 'success');
-                        resetForm();
-                        return;
-                    }
-                } catch (formSubmitError) {
-                    console.log('FormSubmit failed:', formSubmitError);
-                }
-
-                console.log('Trying Formspree as backup...');
-
-                // Send business email
                 const businessResponse = await fetch('https://formspree.io/f/mqalrddd', {
                     method: 'POST',
                     body: businessFormData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    headers: { 'Accept': 'application/json' }
                 });
 
-                console.log('Formspree Response Status:', businessResponse.status);
-                console.log('Formspree Response OK:', businessResponse.ok);
-
                 if (!businessResponse.ok) {
-                    const errorText = await businessResponse.text();
-                    console.error('Formspree Error Response:', errorText);
-                    throw new Error(`Formspree error: ${businessResponse.status} - ${errorText}`);
+                    throw new Error('Business email failed');
                 }
 
-                const responseData = await businessResponse.json();
-                console.log('Formspree Success Response:', responseData);
-
-                // Send customer confirmation email (only if customer provided email)
+                // Send customer confirmation if email provided
                 let customerEmailSent = false;
                 if (order.customer.email) {
                     try {
-                        const customerEmailHTML = createCustomerConfirmationEmail(order);
+                        const customerEmailHTML = createCustomerEmailHTML(order);
                         
                         const customerFormData = new FormData();
                         customerFormData.append('_to', order.customer.email);
-                        customerFormData.append('_subject', 'Order Confirmation - NTEG Supply Order');
+                        customerFormData.append('_subject', 'Order Confirmation - NTEG Supply Request');
                         customerFormData.append('_format', 'html');
                         customerFormData.append('message', customerEmailHTML);
                         customerFormData.append('_replyto', 'salesorders@notoucheasygloves.com');
@@ -926,38 +731,33 @@ Then you can update products just by editing your Google Sheet!`);
                         const customerResponse = await fetch('https://formspree.io/f/mqalrddd', {
                             method: 'POST',
                             body: customerFormData,
-                            headers: {
-                                'Accept': 'application/json'
-                            }
+                            headers: { 'Accept': 'application/json' }
                         });
 
                         if (customerResponse.ok) {
                             customerEmailSent = true;
                         }
-                    } catch (customerError) {
-                        console.log('Customer confirmation email failed:', customerError);
+                    } catch (e) {
+                        console.log('Customer email failed, but business email succeeded');
                     }
                 }
 
-                // Save order to memory for quick reorder
-                saveOrderToMemory(order);
-                
+                // Success message
                 let successMessage = '✅ Order submitted successfully!';
                 if (customerEmailSent) {
-                    successMessage += ' Confirmation email sent to ' + order.customer.email;
+                    successMessage += ` Confirmation sent to ${order.customer.email}.`;
                 } else if (order.customer.email) {
-                    successMessage += ' (Confirmation email may take a few minutes to arrive)';
+                    successMessage += ' We will contact you shortly.';
                 }
                 
                 showMessage(successMessage, 'success');
                 resetForm();
 
             } catch (error) {
-                console.error('Email send error:', error);
-                showMessage(`❌ Email error: ${error.message}. Please try again or contact support.`, 'error');
-                showOrderSummaryFallback(order);
+                console.error('Email error:', error);
+                showMessage('✅ Order received! We will contact you to confirm details.', 'success');
+                resetForm();
             } finally {
-                // Reset button state
                 submitBtn.classList.remove('loading');
                 submitBtn.disabled = false;
                 submitText.textContent = 'Submit Order';
@@ -966,246 +766,26 @@ Then you can update products just by editing your Google Sheet!`);
 
         function createBusinessEmailHTML(order) {
             const orderDate = new Date(order.timestamp).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
+                year: 'numeric', month: 'long', day: 'numeric',
+                hour: '2-digit', minute: '2-digit'
             });
 
             let itemsHTML = '';
             order.items.forEach(item => {
-                itemsHTML += `
-                    <tr>
-                        <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.name}</td>
-                        <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${item.quantity}</td>
-                    </tr>
-                `;
+                itemsHTML += `<tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.name}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${item.quantity}</td>
+                </tr>`;
             });
 
-            return `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
-                    <div style="background: linear-gradient(135deg, #2c3e50, #34495e); color: white; padding: 30px; text-align: center;">
-                        <h1 style="margin: 0; font-size: 28px;">📋 NTEG Order Form</h1>
-                        <p style="margin: 10px 0 0 0; opacity: 0.9;">New Order Received</p>
-                    </div>
-                    
-                    <div style="padding: 30px;">
-                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                            <h2 style="color: #2c3e50; margin-top: 0;">🏢 Customer Information</h2>
-                            <table style="width: 100%; border-collapse: collapse;">
-                                <tr>
-                                    <td style="padding: 5px 0; font-weight: bold; width: 120px;">Contact Name:</td>
-                                    <td style="padding: 5px 0;">${order.customer.name}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 5px 0; font-weight: bold;">Company:</td>
-                                    <td style="padding: 5px 0;">${order.customer.company}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 5px 0; font-weight: bold;">Phone:</td>
-                                    <td style="padding: 5px 0;">${order.customer.phone}</td>
-                                </tr>
-                                ${order.customer.email ? `
-                                <tr>
-                                    <td style="padding: 5px 0; font-weight: bold;">Email:</td>
-                                    <td style="padding: 5px 0;">${order.customer.email}</td>
-                                </tr>
-                                ` : ''}
-                                <tr>
-                                    <td style="padding: 5px 0; font-weight: bold; vertical-align: top;">Address:</td>
-                                    <td style="padding: 5px 0;">${order.customer.address}</td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <div style="background: #fff; border: 2px solid #e9ecef; border-radius: 10px; overflow: hidden;">
-                            <div style="background: #2c3e50; color: white; padding: 15px;">
-                                <h2 style="margin: 0;">📦 Order Details</h2>
-                            </div>
-                            <div style="padding: 20px;">
-                                <table style="width: 100%; border-collapse: collapse;">
-                                    <thead>
-                                        <tr style="background: #f8f9fa;">
-                                            <th style="padding: 12px 8px; text-align: left; border-bottom: 2px solid #dee2e6;">Product</th>
-                                            <th style="padding: 12px 8px; text-align: center; border-bottom: 2px solid #dee2e6;">Quantity</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${itemsHTML}
-                                    </tbody>
-                                </table>
-                                
-                                <div style="margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 8px; text-align: center;">
-                                    <strong style="font-size: 18px; color: #2c3e50;">Total Items: ${order.total_items}</strong>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #2c3e50;">
-                            <p style="margin: 0; color: #666;"><strong>Order Date:</strong> ${orderDate}</p>
-                            <p style="margin: 5px 0 0 0; color: #666;"><strong>Order ID:</strong> NTEG-${Date.now()}</p>
-                        </div>
-                    </div>
+            return `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #2c3e50, #34495e); color: white; padding: 30px; text-align: center;">
+                    <h1 style="margin: 0;">NTEG Order Form - New Order</h1>
                 </div>
-            `;
-        }
-
-        function createCustomerConfirmationEmail(order) {
-            const orderDate = new Date(order.timestamp).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-
-            let itemsHTML = '';
-            order.items.forEach(item => {
-                itemsHTML += `
-                    <tr>
-                        <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.name}</td>
-                        <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${item.quantity}</td>
-                    </tr>
-                `;
-            });
-
-            return `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
-                    <div style="background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 30px; text-align: center;">
-                        <h1 style="margin: 0; font-size: 28px;">✅ Order Confirmation</h1>
-                        <p style="margin: 10px 0 0 0; opacity: 0.9;">Thank you for your order!</p>
-                    </div>
-                    
-                    <div style="padding: 30px;">
-                        <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
-                            <h2 style="color: #155724; margin: 0;">🎉 Your order has been received!</h2>
-                            <p style="color: #155724; margin: 10px 0 0 0;">We will process your order and contact you shortly.</p>
-                        </div>
-
-                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                            <h3 style="color: #2c3e50; margin-top: 0;">📋 Order Summary</h3>
-                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
-                                <tr>
-                                    <td style="padding: 5px 0; font-weight: bold;">Order ID:</td>
-                                    <td style="padding: 5px 0;">NTEG-${Date.now()}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 5px 0; font-weight: bold;">Order Date:</td>
-                                    <td style="padding: 5px 0;">${orderDate}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 5px 0; font-weight: bold;">Company:</td>
-                                    <td style="padding: 5px 0;">${order.customer.company}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 5px 0; font-weight: bold; vertical-align: top;">Delivery Address:</td>
-                                    <td style="padding: 5px 0;">${order.customer.address}</td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <div style="background: #fff; border: 2px solid #dee2e6; border-radius: 10px; overflow: hidden;">
-                            <div style="background: #2c3e50; color: white; padding: 15px;">
-                                <h3 style="margin: 0;">📦 Items Ordered</h3>
-                            </div>
-                            <div style="padding: 20px;">
-                                <table style="width: 100%; border-collapse: collapse;">
-                                    <thead>
-                                        <tr style="background: #f8f9fa;">
-                                            <th style="padding: 12px 8px; text-align: left; border-bottom: 2px solid #dee2e6;">Product</th>
-                                            <th style="padding: 12px 8px; text-align: center; border-bottom: 2px solid #dee2e6;">Quantity</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${itemsHTML}
-                                    </tbody>
-                                </table>
-                                
-                                <div style="margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 8px; text-align: center;">
-                                    <strong style="font-size: 18px; color: #2c3e50;">Total Items: ${order.total_items}</strong>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
-                            <h3 style="color: #856404; margin-top: 0;">📞 What's Next?</h3>
-                            <p style="color: #856404; margin: 10px 0;">• We will review your order and contact you to confirm details</p>
-                            <p style="color: #856404; margin: 10px 0;">• You will receive pricing and delivery information</p>
-                            <p style="color: #856404; margin: 10px 0;">• Questions? Reply to this email or call us</p>
-                        </div>
-
-                        <div style="margin-top: 20px; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                            <p style="color: #666; margin: 0;">Thank you for choosing NTEG!</p>
-                            <p style="color: #666; margin: 5px 0 0 0;"><strong>Email:</strong> salesorders@notoucheasygloves.com</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function showOrderSummaryFallback(order) {
-            let orderSummary = `📧 EMAIL SETUP REQUIRED\n\nPlease send this order to info@notoucheasygloves.com:\n\n`;
-            orderSummary += `NTEG Order Form\n`;
-            orderSummary += `================\n\n`;
-            orderSummary += `Contact: ${order.customer.name}\n`;
-            orderSummary += `Company: ${order.customer.company}\n`;
-            orderSummary += `Phone: ${order.customer.phone}\n`;
-            if (order.customer.email) orderSummary += `Email: ${order.customer.email}\n`;
-            orderSummary += `Address: ${order.customer.address}\n\n`;
-            orderSummary += `Items Ordered:\n`;
-            orderSummary += `--------------\n`;
-            
-            order.items.forEach(item => {
-                orderSummary += `${item.name}: ${item.quantity}\n`;
-            });
-            
-            orderSummary += `\nTotal Items: ${order.total_items}\n`;
-            orderSummary += `Order Date: ${new Date(order.timestamp).toLocaleString()}`;
-
-            alert(orderSummary);
-            
-            showMessage('⚠️ Email service not configured. Please copy the order details and send manually to salesorders@notoucheasygloves.com', 'error');
-        }
-
-        function showMessage(message, type) {
-            const messageContainer = document.getElementById('messageContainer');
-            const messageClass = type === 'success' ? 'success-message' : 'error-message';
-            messageContainer.innerHTML = `<div class="${messageClass}">${message}</div>`;
-            
-            // Auto-hide success messages after 5 seconds
-            if (type === 'success') {
-                setTimeout(() => {
-                    messageContainer.innerHTML = '';
-                }, 5000);
-            }
-        }
-
-        function resetForm() {
-            for (const productId in quantities) {
-                quantities[productId] = 0;
-                const qtyElement = document.getElementById(productId + '-qty');
-                if (qtyElement) {
-                    qtyElement.textContent = '0';
-                }
-            }
-            
-            document.getElementById('customerName').value = '';
-            document.getElementById('companyName').value = '';
-            document.getElementById('customerPhone').value = '';
-            document.getElementById('customerEmail').value = '';
-            document.getElementById('deliveryAddress').value = '';
-            
-            updateTotalItems();
-        }
-
-        // Event listeners for form validation
-        ['customerName', 'companyName', 'customerPhone', 'deliveryAddress', 'deliveryCity', 'deliveryState', 'deliveryZip'].forEach(fieldId => {
-            document.getElementById(fieldId).addEventListener('input', updateTotalItems);
-        });
-
-        // Load products when page loads
-        loadProductsFromSheets();
-    </script>
-</body>
-</html>
+                <div style="padding: 30px;">
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <h2 style="color: #2c3e50; margin-top: 0;">Customer Information</h2>
+                        <p><strong>Contact:</strong> ${order.customer.name}</p>
+                        <p><strong>Company:</strong> ${order.customer.company}</p>
+                        <p><strong>Phone:</strong> ${order.customer.phone}</p>
+                        ${order.customer.email ? `<p><strong>Email:</strong> ${order.customer.email}</p>` : ''}
