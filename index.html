@@ -102,6 +102,21 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
+        .debug-panel {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            font-size: 12px;
+            display: none;
+        }
+
+        .debug-panel.show {
+            display: block;
+        }
+
         .menu-section {
             margin-bottom: 25px;
         }
@@ -139,26 +154,14 @@
             width: 80px;
             height: 80px;
             border-radius: 10px;
-            object-fit: cover;
             margin-right: 20px;
             border: 2px solid #e9ecef;
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2em;
             flex-shrink: 0;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .product-image.emoji-fallback {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
         }
 
         .product-info {
@@ -207,10 +210,6 @@
             box-shadow: 0 5px 15px rgba(44, 62, 80, 0.4);
         }
 
-        .quantity-btn:active {
-            transform: scale(0.95);
-        }
-
         .quantity-display {
             font-size: 1.3em;
             font-weight: 600;
@@ -253,16 +252,11 @@
             box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
             text-transform: uppercase;
             letter-spacing: 1px;
-            position: relative;
         }
 
         .submit-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 35px rgba(231, 76, 60, 0.5);
-        }
-
-        .submit-btn:active {
-            transform: translateY(-1px);
         }
 
         .submit-btn:disabled {
@@ -272,86 +266,49 @@
             transform: none;
         }
 
-        .submit-btn.loading {
-            background: #6c757d;
-            cursor: not-allowed;
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 1.1em;
         }
 
-        .submit-btn.loading::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            top: 50%;
-            left: 50%;
-            margin-left: -10px;
-            margin-top: -10px;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s ease-in-out infinite;
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .success-message {
+        .message.success {
             background: #d4edda;
             border: 1px solid #c3e6cb;
             color: #155724;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
         }
 
-        .error-message {
+        .message.error {
             background: #f8d7da;
             border: 1px solid #f5c6cb;
             color: #721c24;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
         }
 
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
-                gap: 0;
             }
             
             .product-item {
                 flex-direction: column;
-                gap: 15px;
                 text-align: center;
+                gap: 15px;
             }
 
             .product-image {
                 margin-right: 0;
-                margin-bottom: 10px;
             }
 
             .product-info {
                 margin-right: 0;
-                margin-bottom: 10px;
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .quantity-control {
-                gap: 10px;
-            }
-            
-            .quantity-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1.3em;
             }
         }
     </style>
@@ -364,251 +321,95 @@
         </div>
         
         <div class="form-container">
+            <div class="debug-panel" id="debugPanel"></div>
+            
             <div class="customer-info">
                 <h3>Business Information</h3>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="customerName">Contact Name *</label>
-                        <input type="text" id="customerName" name="customerName" required>
+                        <input type="text" id="customerName" required>
                     </div>
                     <div class="form-group">
                         <label for="companyName">Company Name *</label>
-                        <input type="text" id="companyName" name="companyName" required>
+                        <input type="text" id="companyName" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="customerPhone">Phone Number *</label>
-                        <input type="tel" id="customerPhone" name="customerPhone" required placeholder="(713) 789-1234" oninput="formatPhoneNumber(this)">
+                        <input type="tel" id="customerPhone" required placeholder="(713) 789-1234">
                     </div>
                     <div class="form-group">
                         <label for="customerEmail">Email Address</label>
-                        <input type="email" id="customerEmail" name="customerEmail">
+                        <input type="email" id="customerEmail">
                     </div>
                 </div>
                 <div class="form-group full-width">
                     <label for="deliveryAddress">Street Address *</label>
-                    <input type="text" id="deliveryAddress" name="deliveryAddress" placeholder="123 Main Street" required>
+                    <input type="text" id="deliveryAddress" placeholder="123 Main Street" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="deliveryCity">City *</label>
-                        <input type="text" id="deliveryCity" name="deliveryCity" required>
+                        <input type="text" id="deliveryCity" required>
                     </div>
                     <div class="form-group" style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
                         <div>
                             <label for="deliveryState">State *</label>
-                            <input type="text" id="deliveryState" name="deliveryState" placeholder="TX" maxlength="2" required oninput="formatState(this)">
+                            <input type="text" id="deliveryState" placeholder="TX" maxlength="2" required>
                         </div>
                         <div>
                             <label for="deliveryZip">ZIP Code *</label>
-                            <input type="text" id="deliveryZip" name="deliveryZip" placeholder="77001" maxlength="10" required oninput="formatZipCode(this)">
+                            <input type="text" id="deliveryZip" placeholder="77001" maxlength="10" required>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div id="productsContainer" class="loading">
-                Loading products from Google Sheets...
+                Loading products...
             </div>
 
             <div class="submit-section">
                 <div id="messageContainer"></div>
                 <div class="item-count" id="totalItems">Total Items: 0</div>
                 <button class="submit-btn" id="submitBtn" onclick="submitOrder()" disabled>
-                    <span id="submitText">Submit Order</span>
+                    Submit Order
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        // Google Sheets CSV URL - Your Published CSV Link
-        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVfLKN1uuclmD0U9Cbi6_uRZYyMgODqT07r8SKMn9VS8PjRVXWV5rOgmPk-7G0kqPvcBW2uucvvpVh/pub?output=csv';
-        
-        // Store quantities and product data
-        let productsData = {};
-        let quantities = {};
-        let productNames = {};
-
-        // Default fallback products
-        const defaultProducts = {
-            "Safety & Protection": [
-                {
-                    id: "nitrile-gloves",
-                    name: "Disposable Nitrile Gloves",
-                    description: "Powder-free, latex-free nitrile gloves (Box of 100)",
-                    emoji: "🧤",
-                    imageUrl: ""
-                },
-                {
-                    id: "aprons",
-                    name: "Food Service Aprons",
-                    description: "Waterproof disposable aprons (Pack of 50)",
-                    emoji: "🦺",
-                    imageUrl: ""
-                }
-            ],
-            "Paper Products": [
-                {
-                    id: "paper-towels",
-                    name: "Paper Towels",
-                    description: "2-ply commercial grade paper towels (12 rolls)",
-                    emoji: "🧻",
-                    imageUrl: ""
-                },
-                {
-                    id: "napkins",
-                    name: "Napkins",
-                    description: "1-ply white napkins (Pack of 500)",
-                    emoji: "🧻",
-                    imageUrl: ""
-                }
-            ],
-            "Food Service Items": [
-                {
-                    id: "plastic-cups",
-                    name: "Plastic Cups (16oz)",
-                    description: "Clear disposable cups (Pack of 100)",
-                    emoji: "🥤",
-                    imageUrl: ""
-                },
-                {
-                    id: "plastic-utensils",
-                    name: "Plastic Utensil Set",
-                    description: "Forks, knives, spoons combo pack (300 pieces)",
-                    emoji: "🍴",
-                    imageUrl: ""
-                }
-            ],
-            "Cleaning Supplies": [
-                {
-                    id: "all-purpose-cleaner",
-                    name: "All-Purpose Cleaner",
-                    description: "Commercial grade surface cleaner (1 gallon)",
-                    emoji: "🧴",
-                    imageUrl: ""
-                },
-                {
-                    id: "hand-sanitizer",
-                    name: "Hand Sanitizer",
-                    description: "70% alcohol hand sanitizer (32 oz pump bottle)",
-                    emoji: "🧼",
-                    imageUrl: ""
-                }
-            ]
+        // Configuration
+        const CONFIG = {
+            SHEETS_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVfLKN1uuclmD0U9Cbi6_uRZYyMgODqT07r8SKMn9VS8PjRVXWV5rOgmPk-7G0kqPvcBW2uucvvpVh/pub?output=csv',
+            FORMSPREE_ID: 'mqalrddd',
+            DEBUG: true
         };
 
-        // Load products from Google Sheets
-        async function loadProductsFromSheets() {
-            try {
-                const response = await fetch(GOOGLE_SHEETS_CSV_URL);
-                if (!response.ok) throw new Error('Failed to fetch');
-                
-                const csvText = await response.text();
-                const productsData = parseCSVToProducts(csvText);
-                
-                // Initialize quantities and product names
-                for (const category in productsData) {
-                    productsData[category].forEach(product => {
-                        quantities[product.id] = 0;
-                        productNames[product.id] = product.name;
-                    });
-                }
-                
-                renderProducts(productsData);
-                
-            } catch (error) {
-                console.log('Using default products (Google Sheets not accessible)');
-                useDefaultProducts();
-            }
-        }
+        // State management
+        const state = {
+            products: {},
+            quantities: {},
+            productNames: {},
+            loading: false
+        };
 
-        function parseCSVToProducts(csvText) {
-            const lines = csvText.trim().split('\n');
-            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-            
-            const productsData = {};
-            
-            for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
-                
-                if (values.length >= 4) {
-                    const category = values[0];
-                    const product = {
-                        id: values[1],
-                        name: values[2],
-                        description: values[3],
-                        emoji: values[4] || '📦',
-                        imageUrl: values[5] || ''
-                    };
-                    
-                    if (!productsData[category]) {
-                        productsData[category] = [];
-                    }
-                    productsData[category].push(product);
+        // Debug logging
+        function debug(message, data = null) {
+            if (CONFIG.DEBUG) {
+                console.log(`[DEBUG] ${message}`, data || '');
+                const debugPanel = document.getElementById('debugPanel');
+                if (debugPanel) {
+                    debugPanel.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+                    debugPanel.classList.add('show');
                 }
             }
-            
-            return productsData;
         }
 
-        function useDefaultProducts() {
-            for (const category in defaultProducts) {
-                defaultProducts[category].forEach(product => {
-                    quantities[product.id] = 0;
-                    productNames[product.id] = product.name;
-                });
-            }
-            renderProducts(defaultProducts);
-        }
-
-        function renderProducts(productsData) {
-            const container = document.getElementById('productsContainer');
-            let html = '';
-
-            for (const [categoryName, products] of Object.entries(productsData)) {
-                html += `<div class="menu-section">`;
-                html += `<div class="category-title">${getCategoryIcon(categoryName)} ${categoryName}</div>`;
-                
-                products.forEach(product => {
-                    const imageDisplay = product.imageUrl ? 
-                        `<img src="${product.imageUrl}" alt="${product.name}" onerror="this.parentElement.innerHTML='${product.emoji}'; this.parentElement.classList.add('emoji-fallback');">` : 
-                        product.emoji;
-                        
-                    html += `
-                        <div class="product-item">
-                            <div class="product-image">${imageDisplay}</div>
-                            <div class="product-info">
-                                <div class="product-name">${product.name}</div>
-                                <div class="product-description">${product.description}</div>
-                            </div>
-                            <div class="quantity-control">
-                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', -1)">-</button>
-                                <div class="quantity-display" id="${product.id}-qty">0</div>
-                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', 1)">+</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                html += `</div>`;
-            }
-
-            container.innerHTML = html;
-        }
-
-        function getCategoryIcon(categoryName) {
-            const icons = {
-                'Safety & Protection': '🧤',
-                'Paper Products': '🧻',
-                'Food Service Items': '🍴',
-                'Cleaning Supplies': '🧽'
-            };
-            return icons[categoryName] || '📦';
-        }
-
-        // Phone number formatting
+        // Utility functions
         function formatPhoneNumber(input) {
             let value = input.value.replace(/\D/g, '');
             if (value.length > 10) value = value.slice(0, 10);
@@ -636,35 +437,198 @@
             input.value = value;
         }
 
+        function showMessage(message, type) {
+            const container = document.getElementById('messageContainer');
+            container.innerHTML = `<div class="message ${type}">${message}</div>`;
+            setTimeout(() => {
+                if (type === 'success') container.innerHTML = '';
+            }, 5000);
+        }
+
+        // Product loading
+        async function loadProducts() {
+            debug('Starting product load...');
+            const container = document.getElementById('productsContainer');
+            
+            try {
+                container.innerHTML = '<div class="loading">Loading products from Google Sheets...</div>';
+                
+                debug('Fetching CSV from:', CONFIG.SHEETS_URL);
+                const response = await fetch(CONFIG.SHEETS_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const csvText = await response.text();
+                debug('CSV response length:', csvText.length);
+                debug('First 200 chars:', csvText.substring(0, 200));
+                
+                if (!csvText || csvText.trim().length === 0) {
+                    throw new Error('Empty CSV response');
+                }
+                
+                const products = parseCSV(csvText);
+                debug('Parsed products:', products);
+                
+                if (Object.keys(products).length === 0) {
+                    throw new Error('No products found in CSV');
+                }
+                
+                state.products = products;
+                initializeQuantities();
+                renderProducts();
+                
+            } catch (error) {
+                debug('Product load failed:', error.message);
+                console.error('Product loading error:', error);
+                loadDefaultProducts();
+            }
+        }
+
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length < 2) {
+                throw new Error('CSV must have header and at least one data row');
+            }
+            
+            const products = {};
+            
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                // Handle CSV with quotes and commas properly
+                const values = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        values.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim());
+                
+                if (values.length >= 4) {
+                    const [category, id, name, description, emoji = '📦'] = values;
+                    
+                    if (!products[category]) {
+                        products[category] = [];
+                    }
+                    
+                    products[category].push({
+                        id: id.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase(),
+                        name: name,
+                        description: description,
+                        emoji: emoji
+                    });
+                }
+            }
+            
+            return products;
+        }
+
+        function loadDefaultProducts() {
+            debug('Loading default products...');
+            state.products = {
+                "Safety & Protection": [
+                    {
+                        id: "nitrile-gloves",
+                        name: "Disposable Nitrile Gloves",
+                        description: "Powder-free, latex-free (Box of 100)",
+                        emoji: "🧤"
+                    }
+                ],
+                "Cleaning Supplies": [
+                    {
+                        id: "hand-sanitizer",
+                        name: "Hand Sanitizer",
+                        description: "70% alcohol (32 oz pump bottle)",
+                        emoji: "🧼"
+                    }
+                ]
+            };
+            initializeQuantities();
+            renderProducts();
+        }
+
+        function initializeQuantities() {
+            state.quantities = {};
+            state.productNames = {};
+            
+            for (const category in state.products) {
+                state.products[category].forEach(product => {
+                    state.quantities[product.id] = 0;
+                    state.productNames[product.id] = product.name;
+                });
+            }
+            debug('Initialized quantities for products:', Object.keys(state.quantities));
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('productsContainer');
+            let html = '';
+
+            for (const [categoryName, products] of Object.entries(state.products)) {
+                html += `<div class="menu-section">
+                    <div class="category-title">${categoryName}</div>`;
+                
+                products.forEach(product => {
+                    html += `
+                        <div class="product-item">
+                            <div class="product-image">${product.emoji}</div>
+                            <div class="product-info">
+                                <div class="product-name">${product.name}</div>
+                                <div class="product-description">${product.description}</div>
+                            </div>
+                            <div class="quantity-control">
+                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', -1)">-</button>
+                                <div class="quantity-display" id="${product.id}-qty">0</div>
+                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            }
+
+            container.innerHTML = html;
+            debug('Products rendered successfully');
+        }
+
         function changeQuantity(productId, change) {
-            const newQuantity = quantities[productId] + change;
+            const newQuantity = state.quantities[productId] + change;
             if (newQuantity >= 0) {
-                quantities[productId] = newQuantity;
-                document.getElementById(productId + '-qty').textContent = newQuantity;
+                state.quantities[productId] = newQuantity;
+                const element = document.getElementById(productId + '-qty');
+                if (element) {
+                    element.textContent = newQuantity;
+                }
                 updateTotalItems();
             }
         }
 
         function updateTotalItems() {
-            const total = Object.values(quantities).reduce((sum, qty) => sum + qty, 0);
+            const total = Object.values(state.quantities).reduce((sum, qty) => sum + qty, 0);
             document.getElementById('totalItems').textContent = `Total Items: ${total}`;
             
             const submitBtn = document.getElementById('submitBtn');
-            const requiredFields = [
-                document.getElementById('customerName').value.trim(),
-                document.getElementById('companyName').value.trim(),
-                document.getElementById('customerPhone').value.trim(),
-                document.getElementById('deliveryAddress').value.trim(),
-                document.getElementById('deliveryCity').value.trim(),
-                document.getElementById('deliveryState').value.trim(),
-                document.getElementById('deliveryZip').value.trim()
-            ];
-            
-            if (total > 0 && requiredFields.every(field => field)) {
-                submitBtn.disabled = false;
-            } else {
-                submitBtn.disabled = true;
-            }
+            const isFormValid = validateForm() && total > 0;
+            submitBtn.disabled = !isFormValid;
+        }
+
+        function validateForm() {
+            const required = ['customerName', 'companyName', 'customerPhone', 
+                            'deliveryAddress', 'deliveryCity', 'deliveryState', 'deliveryZip'];
+            return required.every(id => document.getElementById(id).value.trim());
         }
 
         function getFormattedAddress() {
@@ -672,169 +636,152 @@
             const city = document.getElementById('deliveryCity').value.trim();
             const state = document.getElementById('deliveryState').value.trim();
             const zip = document.getElementById('deliveryZip').value.trim();
-            
             return `${street}\n${city}, ${state} ${zip}`;
         }
 
-        function submitOrder() {
+        async function submitOrder() {
+            if (state.loading) return;
+            
+            debug('Starting order submission...');
             const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            const messageContainer = document.getElementById('messageContainer');
+            const originalText = submitBtn.textContent;
             
-            messageContainer.innerHTML = '';
-            
-            const customerName = document.getElementById('customerName').value.trim();
-            const companyName = document.getElementById('companyName').value.trim();
-            const customerPhone = document.getElementById('customerPhone').value.trim();
-            const customerEmail = document.getElementById('customerEmail').value.trim();
-            
-            const street = document.getElementById('deliveryAddress').value.trim();
-            const city = document.getElementById('deliveryCity').value.trim();
-            const state = document.getElementById('deliveryState').value.trim();
-            const zip = document.getElementById('deliveryZip').value.trim();
-
-            if (!customerName || !companyName || !customerPhone || !street || !city || !state || !zip) {
-                showMessage('Please fill in all required fields', 'error');
-                return;
+            try {
+                state.loading = true;
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+                
+                const orderData = collectOrderData();
+                debug('Order data collected:', orderData);
+                
+                await sendBusinessEmail(orderData);
+                
+                showMessage('Order submitted successfully! We will contact you shortly.', 'success');
+                resetForm();
+                
+            } catch (error) {
+                debug('Order submission failed:', error.message);
+                console.error('Submission error:', error);
+                showMessage('Order submission failed. Please try again or contact us directly.', 'error');
+            } finally {
+                state.loading = false;
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
             }
+        }
 
+        function collectOrderData() {
             const orderItems = [];
-            for (const [productId, quantity] of Object.entries(quantities)) {
+            for (const [productId, quantity] of Object.entries(state.quantities)) {
                 if (quantity > 0) {
                     orderItems.push({
-                        name: productNames[productId],
+                        name: state.productNames[productId],
                         quantity: quantity
                     });
                 }
             }
 
-            if (orderItems.length === 0) {
-                showMessage('Please select at least one item', 'error');
-                return;
-            }
-
-            // Show loading state
-            submitBtn.classList.add('loading');
-            submitBtn.disabled = true;
-            submitText.textContent = 'Sending...';
-
-            const order = {
+            return {
                 customer: {
-                    name: customerName,
-                    company: companyName,
-                    phone: customerPhone,
-                    email: customerEmail,
-                    street: street,
-                    city: city,
-                    state: state,
-                    zip: zip,
+                    name: document.getElementById('customerName').value.trim(),
+                    company: document.getElementById('companyName').value.trim(),
+                    phone: document.getElementById('customerPhone').value.trim(),
+                    email: document.getElementById('customerEmail').value.trim(),
                     address: getFormattedAddress()
                 },
                 items: orderItems,
                 timestamp: new Date().toISOString(),
                 total_items: orderItems.reduce((sum, item) => sum + item.quantity, 0)
             };
-
-            sendOrderEmail(order);
         }
 
-        async function sendOrderEmail(order) {
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
+        async function sendBusinessEmail(orderData) {
+            debug('Sending business email to salesorders@notoucheasygloves.com');
             
-            try {
-                // Create business email HTML
-                const businessEmailHTML = createBusinessEmailHTML(order);
-                
-                // Send business notification
-                const businessFormData = new FormData();
-                businessFormData.append('_to', 'salesorders@notoucheasygloves.com');
-                businessFormData.append('_subject', `NEW ORDER - ${order.customer.company} (${order.total_items} items)`);
-                businessFormData.append('_format', 'html');
-                businessFormData.append('message', businessEmailHTML);
-                businessFormData.append('_replyto', order.customer.email || 'salesorders@notoucheasygloves.com');
+            const formData = new FormData();
+            formData.append('_to', 'salesorders@notoucheasygloves.com');
+            formData.append('_subject', `NEW ORDER - ${orderData.customer.company} (${orderData.total_items} items)`);
+            formData.append('_replyto', orderData.customer.email || 'salesorders@notoucheasygloves.com');
+            
+            // Send structured data (easier to process)
+            formData.append('customer_name', orderData.customer.name);
+            formData.append('company_name', orderData.customer.company);
+            formData.append('phone', orderData.customer.phone);
+            formData.append('email', orderData.customer.email || 'Not provided');
+            formData.append('address', orderData.customer.address);
+            formData.append('total_items', orderData.total_items.toString());
+            
+            // Add order items
+            orderData.items.forEach((item, index) => {
+                formData.append(`item_${index + 1}`, `${item.name}: ${item.quantity}`);
+            });
 
-                const businessResponse = await fetch('https://formspree.io/f/mqalrddd', {
-                    method: 'POST',
-                    body: businessFormData,
-                    headers: { 'Accept': 'application/json' }
-                });
-
-                if (!businessResponse.ok) {
-                    throw new Error('Business email failed');
+            const response = await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
                 }
+            });
 
-                // Send customer confirmation if email provided
-                let customerEmailSent = false;
-                if (order.customer.email) {
-                    try {
-                        const customerEmailHTML = createCustomerEmailHTML(order);
-                        
-                        const customerFormData = new FormData();
-                        customerFormData.append('_to', order.customer.email);
-                        customerFormData.append('_subject', 'Order Confirmation - NTEG Supply Request');
-                        customerFormData.append('_format', 'html');
-                        customerFormData.append('message', customerEmailHTML);
-                        customerFormData.append('_replyto', 'salesorders@notoucheasygloves.com');
+            debug('Email response status:', response.status);
 
-                        const customerResponse = await fetch('https://formspree.io/f/mqalrddd', {
-                            method: 'POST',
-                            body: customerFormData,
-                            headers: { 'Accept': 'application/json' }
-                        });
-
-                        if (customerResponse.ok) {
-                            customerEmailSent = true;
-                        }
-                    } catch (e) {
-                        console.log('Customer email failed, but business email succeeded');
-                    }
-                }
-
-                // Success message
-                let successMessage = '✅ Order submitted successfully!';
-                if (customerEmailSent) {
-                    successMessage += ` Confirmation sent to ${order.customer.email}.`;
-                } else if (order.customer.email) {
-                    successMessage += ' We will contact you shortly.';
-                }
-                
-                showMessage(successMessage, 'success');
-                resetForm();
-
-            } catch (error) {
-                console.error('Email error:', error);
-                showMessage('✅ Order received! We will contact you to confirm details.', 'success');
-                resetForm();
-            } finally {
-                submitBtn.classList.remove('loading');
-                submitBtn.disabled = false;
-                submitText.textContent = 'Submit Order';
+            if (!response.ok) {
+                const errorText = await response.text();
+                debug('Email error response:', errorText);
+                throw new Error(`Email failed: ${response.status} ${response.statusText}`);
             }
+
+            debug('Business email sent successfully');
         }
 
-        function createBusinessEmailHTML(order) {
-            const orderDate = new Date(order.timestamp).toLocaleDateString('en-US', {
-                year: 'numeric', month: 'long', day: 'numeric',
-                hour: '2-digit', minute: '2-digit'
+        function resetForm() {
+            // Reset quantities
+            for (const productId in state.quantities) {
+                state.quantities[productId] = 0;
+                const element = document.getElementById(productId + '-qty');
+                if (element) element.textContent = '0';
+            }
+            
+            // Reset form fields
+            ['customerName', 'companyName', 'customerPhone', 'customerEmail', 
+             'deliveryAddress', 'deliveryCity', 'deliveryState', 'deliveryZip'].forEach(id => {
+                document.getElementById(id).value = '';
             });
+            
+            updateTotalItems();
+        }
 
-            let itemsHTML = '';
-            order.items.forEach(item => {
-                itemsHTML += `<tr>
-                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.name}</td>
-                    <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${item.quantity}</td>
-                </tr>`;
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form formatting
+            document.getElementById('customerPhone').addEventListener('input', function() {
+                formatPhoneNumber(this);
+                updateTotalItems();
             });
+            
+            document.getElementById('deliveryState').addEventListener('input', function() {
+                formatState(this);
+                updateTotalItems();
+            });
+            
+            document.getElementById('deliveryZip').addEventListener('input', function() {
+                formatZipCode(this);
+                updateTotalItems();
+            });
+            
+            // Form validation
+            ['customerName', 'companyName', 'deliveryAddress', 'deliveryCity'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateTotalItems);
+            });
+            
+            // Load products
+            loadProducts();
+        });
 
-            return `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <div style="background: linear-gradient(135deg, #2c3e50, #34495e); color: white; padding: 30px; text-align: center;">
-                    <h1 style="margin: 0;">NTEG Order Form - New Order</h1>
-                </div>
-                <div style="padding: 30px;">
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                        <h2 style="color: #2c3e50; margin-top: 0;">Customer Information</h2>
-                        <p><strong>Contact:</strong> ${order.customer.name}</p>
-                        <p><strong>Company:</strong> ${order.customer.company}</p>
-                        <p><strong>Phone:</strong> ${order.customer.phone}</p>
-                        ${order.customer.email ? `<p><strong>Email:</strong> ${order.customer.email}</p>` : ''}
+        // Make functions globally available
+        window.changeQuantity = changeQuantity;
+        window.submitOrder = submitOrder;
+    </script>
+</body>
+</html>
