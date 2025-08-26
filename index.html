@@ -655,9 +655,9 @@
                                 <div class="product-description">${product.description}</div>
                             </div>
                             <div class="quantity-control">
-                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', -1)">-</button>
+                                <button type="button" class="quantity-btn" data-product-id="${product.id}" data-change="-1">-</button>
                                 <div class="quantity-display" id="${product.id}-qty">0</div>
-                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', 1)">+</button>
+                                <button type="button" class="quantity-btn" data-product-id="${product.id}" data-change="1">+</button>
                             </div>
                         </div>
                     `;
@@ -667,10 +667,39 @@
             }
 
             container.innerHTML = html;
+            
+            // Add event listeners to quantity buttons
+            document.querySelectorAll('.quantity-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const productId = this.getAttribute('data-product-id');
+                    const change = parseInt(this.getAttribute('data-change'));
+                    
+                    const currentQty = state.quantities[productId] || 0;
+                    const newQuantity = currentQty + change;
+                    
+                    if (newQuantity >= 0) {
+                        state.quantities[productId] = newQuantity;
+                        const qtyElement = document.getElementById(productId + '-qty');
+                        if (qtyElement) {
+                            qtyElement.textContent = newQuantity;
+                        }
+                        updateTotalItems();
+                    }
+                });
+            });
         }
 
         function changeQuantity(productId, change) {
-            const newQuantity = state.quantities[productId] + change;
+            // Prevent form submission when clicking quantity buttons
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const currentQty = state.quantities[productId] || 0;
+            const newQuantity = currentQty + change;
+            
             if (newQuantity >= 0) {
                 state.quantities[productId] = newQuantity;
                 const element = document.getElementById(productId + '-qty');
@@ -679,6 +708,8 @@
                 }
                 updateTotalItems();
             }
+            
+            return false; // Prevent any form submission
         }
 
         function updateTotalItems() {
@@ -818,7 +849,6 @@
             loadProducts();
         });
 
-        window.changeQuantity = changeQuantity;
         window.submitOrder = submitOrder;
     </script>
 </body>
