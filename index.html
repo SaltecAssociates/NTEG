@@ -82,16 +82,16 @@
             background: #ffffff;
             padding: 30px;
             border-radius: 12px;
-            border: 3px solid #4caf50;
-            box-shadow: 0 4px 12px rgba(0, 128, 0, 0.1);
+            border: 2px solid #dee2e6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .customer-info h3 {
-            color: #2e7d32;
+            color: #333333;
             margin-bottom: 24px;
             font-size: 1.3em;
             font-weight: 600;
-            border-bottom: 3px solid #4caf50;
+            border-bottom: 2px solid #dee2e6;
             padding-bottom: 8px;
         }
 
@@ -113,7 +113,7 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #2e7d32;
+            color: #333333;
             font-weight: 500;
             font-size: 0.95em;
         }
@@ -121,22 +121,19 @@
         .form-group input, .form-group textarea {
             width: 100%;
             padding: 14px 16px;
-            border: 2px solid #4caf50;
+            border: 2px solid #dee2e6;
             border-radius: 8px;
             font-size: 16px;
             transition: all 0.2s ease;
             font-family: inherit;
             background: #ffffff;
+            color: #333333;
         }
 
         .form-group input:focus, .form-group textarea:focus {
             outline: none;
             border-color: #2e7d32;
             box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.3);
-        }
-
-        .debug-panel {
-            display: none;
         }
 
         .menu-section {
@@ -159,16 +156,16 @@
             padding: 24px;
             margin-bottom: 16px;
             background: #ffffff;
-            border: 2px solid #4caf50;
+            border: 2px solid #dee2e6;
             border-radius: 12px;
             transition: all 0.2s ease;
         }
 
         .product-item:hover {
-            border-color: #2e7d32;
-            box-shadow: 0 6px 16px rgba(0, 128, 0, 0.2);
+            border-color: #333333;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
             transform: translateY(-1px);
-            background: #f1f8e9;
+            background: #f8f9fa;
         }
 
         .product-image {
@@ -177,7 +174,7 @@
             border-radius: 8px;
             margin-right: 20px;
             background: #ffffff;
-            border: 2px solid #2e7d32;
+            border: 2px solid #333333;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -193,15 +190,14 @@
         .product-name {
             font-size: 1.1em;
             font-weight: 600;
-            color: #2e7d32;
+            color: #333333;
             margin-bottom: 4px;
         }
 
         .product-description {
-            color: #2e7d32;
+            color: #666666;
             font-size: 0.9em;
             line-height: 1.4;
-            opacity: 0.8;
         }
 
         .quantity-control {
@@ -214,10 +210,10 @@
         .quantity-btn {
             width: 36px;
             height: 36px;
-            border: 2px solid #2e7d32;
+            border: 2px solid #333333;
             border-radius: 6px;
             background: #ffffff;
-            color: #2e7d32;
+            color: #333333;
             font-size: 1.2em;
             font-weight: 600;
             cursor: pointer;
@@ -228,8 +224,8 @@
         }
 
         .quantity-btn:hover {
-            background: #2e7d32;
-            border-color: #2e7d32;
+            background: #333333;
+            border-color: #333333;
             color: white;
             transform: scale(1.05);
         }
@@ -237,20 +233,20 @@
         .quantity-display {
             font-size: 1.1em;
             font-weight: 600;
-            color: #2e7d32;
+            color: #333333;
             min-width: 32px;
             text-align: center;
-            background: #c8e6c9;
+            background: #f8f9fa;
             padding: 8px 12px;
             border-radius: 6px;
-            border: 2px solid #2e7d32;
+            border: 2px solid #333333;
         }
 
         .submit-section {
             margin-top: 48px;
             text-align: center;
             padding: 32px 0;
-            border-top: 3px solid #4caf50;
+            border-top: 3px solid #dee2e6;
             background: #e8f5e8;
             margin-left: -40px;
             margin-right: -40px;
@@ -292,7 +288,7 @@
 
         .submit-btn:disabled {
             background: #dee2e6;
-            color: #2e7d32;
+            color: #666666;
             cursor: not-allowed;
             transform: none;
         }
@@ -300,7 +296,7 @@
         .loading {
             text-align: center;
             padding: 40px;
-            color: #2e7d32;
+            color: #333333;
             font-size: 1em;
         }
 
@@ -357,8 +353,6 @@
         </div>
         
         <div class="form-container">
-            <div class="debug-panel" id="debugPanel"></div>
-            
             <div class="customer-info">
                 <h3>Business Information</h3>
                 <div class="form-row">
@@ -418,14 +412,12 @@
     </div>
 
     <script>
-        // Configuration
         const CONFIG = {
             SHEETS_URL: 'https://docs.google.com/spreadsheets/d/1PB71I0h1y_242-qqgmDaE5XiaeaFDHqy_kpbapqSyoU/export?format=csv&gid=0',
             FORMSPREE_ID: 'mqalrddd',
-            DEBUG: true
+            DEBUG: false
         };
 
-        // State management
         const state = {
             products: {},
             quantities: {},
@@ -433,19 +425,12 @@
             loading: false
         };
 
-        // Debug logging
         function debug(message, data = null) {
             if (CONFIG.DEBUG) {
                 console.log(`[DEBUG] ${message}`, data || '');
-                const debugPanel = document.getElementById('debugPanel');
-                if (debugPanel) {
-                    debugPanel.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
-                    debugPanel.classList.add('show');
-                }
             }
         }
 
-        // Utility functions
         function formatPhoneNumber(input) {
             let value = input.value.replace(/\D/g, '');
             if (value.length > 10) value = value.slice(0, 10);
@@ -481,15 +466,12 @@
             }, 5000);
         }
 
-        // Product loading with enhanced diagnostics
         async function loadProducts() {
             debug('Starting product load...');
             const container = document.getElementById('productsContainer');
             
             try {
                 container.innerHTML = '<div class="loading">Loading products from Google Sheets...</div>';
-                
-                debug('Fetching CSV from:', CONFIG.SHEETS_URL);
                 
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 10000);
@@ -503,15 +485,11 @@
                 
                 clearTimeout(timeoutId);
                 
-                debug('Response status:', response.status);
-                
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
                 
                 const csvText = await response.text();
-                debug('Raw CSV response length:', csvText.length);
-                debug('First 500 characters:', csvText.substring(0, 500));
                 
                 if (!csvText || csvText.trim().length === 0) {
                     throw new Error('Empty CSV response');
@@ -522,7 +500,6 @@
                 }
                 
                 const products = parseCSV(csvText);
-                debug('Parsed products object:', products);
                 
                 if (Object.keys(products).length === 0) {
                     throw new Error('No products found in CSV');
@@ -532,17 +509,12 @@
                 initializeQuantities();
                 renderProducts();
                 
-                debug('Product loading completed successfully');
-                
             } catch (error) {
-                debug('Product load failed with error:', error.message);
+                debug('Product load failed:', error.message);
                 container.innerHTML = `
                     <div class="message error">
-                        <strong>Unable to load products from Google Sheets</strong><br>
-                        Error: ${error.message}<br>
-                        Loading default products instead...
+                        Unable to load products from Google Sheets. Loading default products...
                     </div>
-                    <div class="loading">Loading default products...</div>
                 `;
                 
                 setTimeout(() => {
@@ -552,16 +524,13 @@
         }
 
         function parseCSV(csvText) {
-            debug('Starting CSV parsing...');
             const lines = csvText.trim().split('\n').filter(line => line.trim());
-            debug('Non-empty lines found:', lines.length);
             
             if (lines.length < 2) {
                 throw new Error('CSV must have header row and at least one data row');
             }
             
             const products = {};
-            let successfulRows = 0;
             
             for (let i = 1; i < lines.length; i++) {
                 const line = lines[i].trim();
@@ -569,43 +538,27 @@
                 
                 try {
                     const values = parseCSVLine(line);
-                    debug(`Parsed values for line ${i}:`, values);
                     
-                    if (values.length < 4) {
-                        debug(`Skipping line ${i} - insufficient columns`);
-                        continue;
-                    }
+                    if (values.length < 4) continue;
                     
                     const [category, id, name, description, emoji = '📦'] = values;
                     
-                    if (!category || !id || !name) {
-                        debug(`Skipping line ${i} - missing required fields`);
-                        continue;
-                    }
+                    if (!category || !id || !name) continue;
                     
                     if (!products[category]) {
                         products[category] = [];
                     }
                     
-                    const product = {
+                    products[category].push({
                         id: sanitizeId(id),
                         name: name.trim(),
                         description: description.trim(),
                         emoji: emoji.trim() || '📦'
-                    };
-                    
-                    products[category].push(product);
-                    successfulRows++;
+                    });
                     
                 } catch (lineError) {
                     debug(`Error parsing line ${i}:`, lineError.message);
                 }
-            }
-            
-            debug(`Successfully parsed ${successfulRows} products`);
-            
-            if (successfulRows === 0) {
-                throw new Error('No valid product rows found');
             }
             
             return products;
@@ -675,7 +628,6 @@
                     state.productNames[product.id] = product.name;
                 });
             }
-            debug('Initialized quantities for products:', Object.keys(state.quantities));
         }
 
         function renderProducts() {
@@ -707,7 +659,6 @@
             }
 
             container.innerHTML = html;
-            debug('Products rendered successfully');
         }
 
         function changeQuantity(productId, change) {
@@ -748,7 +699,6 @@
         async function submitOrder() {
             if (state.loading) return;
             
-            debug('Starting order submission...');
             const submitBtn = document.getElementById('submitBtn');
             const originalText = submitBtn.textContent;
             
@@ -758,15 +708,12 @@
                 submitBtn.textContent = 'Sending...';
                 
                 const orderData = collectOrderData();
-                debug('Order data collected:', orderData);
-                
                 await sendBusinessEmail(orderData);
                 
                 showMessage('Order submitted successfully! We will contact you shortly.', 'success');
                 resetForm();
                 
             } catch (error) {
-                debug('Order submission failed:', error.message);
                 showMessage('Order submission failed. Please try again or contact us directly.', 'error');
             } finally {
                 state.loading = false;
@@ -801,8 +748,6 @@
         }
 
         async function sendBusinessEmail(orderData) {
-            debug('Sending business email to salesorders@notoucheasygloves.com');
-            
             const formData = new FormData();
             formData.append('_to', 'salesorders@notoucheasygloves.com');
             formData.append('_subject', `NEW ORDER - ${orderData.customer.company} (${orderData.total_items} items)`);
@@ -827,15 +772,9 @@
                 }
             });
 
-            debug('Email response status:', response.status);
-
             if (!response.ok) {
-                const errorText = await response.text();
-                debug('Email error response:', errorText);
-                throw new Error(`Email failed: ${response.status} ${response.statusText}`);
+                throw new Error(`Email failed: ${response.status}`);
             }
-
-            debug('Business email sent successfully');
         }
 
         function resetForm() {
@@ -853,7 +792,6 @@
             updateTotalItems();
         }
 
-        // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('customerPhone').addEventListener('input', function() {
                 formatPhoneNumber(this);
