@@ -705,8 +705,8 @@
             for (const [categoryName, products] of Object.entries(state.products)) {
                 const categoryId = categoryName.toLowerCase().replace(/[^a-z0-9]/g, '-');
                 html += `<div class="menu-section">
-                    <div class="category-title" data-category="${categoryId}">${categoryName}</div>
-                    <div class="category-content" id="category-${categoryId}">`;
+                    <div class="category-title collapsed" data-category="${categoryId}">${categoryName}</div>
+                    <div class="category-content collapsed" id="category-${categoryId}">`;
                 
                 products.forEach(product => {
                     // Determine what to show in the product image area
