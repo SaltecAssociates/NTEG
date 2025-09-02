@@ -549,7 +549,7 @@
                     
                     if (values.length < 4) continue;
                     
-                    const [category, id, name, description, emoji = '📦'] = values;
+                    const [category, id, name, description, emoji = '📦', imageUrl = ''] = values;
                     
                     if (!category || !id || !name) continue;
                     
@@ -561,7 +561,8 @@
                         id: sanitizeId(id),
                         name: name.trim(),
                         description: description.trim(),
-                        emoji: emoji.trim() || '📦'
+                        emoji: emoji.trim() || '📦',
+                        imageUrl: imageUrl.trim()
                     });
                     
                 } catch (lineError) {
@@ -647,9 +648,33 @@
                     <div class="category-title">${categoryName}</div>`;
                 
                 products.forEach(product => {
+                    // Determine what to show in the product image area
+                    let imageContent;
+                    if (product.imageUrl && product.imageUrl.trim() !== '') {
+                        let imageUrl = product.imageUrl.trim();
+                        
+                        // Convert Google Drive view URL to direct image URL if needed
+                        if (imageUrl.includes('drive.google.com/file/d/')) {
+                            const fileId = imageUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                            if (fileId) {
+                                imageUrl = `https://drive.google.com/uc?id=${fileId[1]}`;
+                            }
+                        }
+                        
+                        // Clean up the URL encoding if needed
+                        imageUrl = encodeURI(decodeURI(imageUrl));
+                        
+                        imageContent = `<img src="${imageUrl}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;" 
+                                       onerror="console.log('Image failed to load: ${imageUrl}'); this.style.display='none'; this.nextElementSibling.style.display='flex';" 
+                                       onload="console.log('Image loaded successfully: ${imageUrl}')">
+                                       <div style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 1.8em;">${product.emoji}</div>`;
+                    } else {
+                        imageContent = product.emoji;
+                    }
+                    
                     html += `
                         <div class="product-item">
-                            <div class="product-image">${product.emoji}</div>
+                            <div class="product-image">${imageContent}</div>
                             <div class="product-info">
                                 <div class="product-name">${product.name}</div>
                                 <div class="product-description">${product.description}</div>
