@@ -144,77 +144,105 @@
             background: #2e7d32;
             color: white;
             padding: 16px 24px;
-            margin: 24px -40px 24px -40px;
+            margin: 24px -40px 0px -40px;
             font-size: 1.1em;
             font-weight: 600;
             text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            position: relative;
+        }
+
+        .category-title:hover {
+            background: #1b5e20;
+        }
+
+        .category-title::after {
+            content: "▼";
+            position: absolute;
+            right: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .category-title.collapsed::after {
+            transform: rotate(-90deg);
+        }
+
+        .category-content {
+            display: block;
+            margin-bottom: 24px;
+        }
+
+        .category-content.collapsed {
+            display: none;
         }
 
         .product-item {
             display: flex;
             align-items: center;
-            padding: 24px;
-            margin-bottom: 16px;
+            padding: 16px 24px;
+            margin-bottom: 8px;
             background: #ffffff;
             border: 2px solid #dee2e6;
-            border-radius: 12px;
+            border-radius: 8px;
             transition: all 0.2s ease;
+            gap: 16px;
         }
 
         .product-item:hover {
             border-color: #333333;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transform: translateY(-1px);
             background: #f8f9fa;
         }
 
         .product-image {
-            width: 64px;
-            height: 64px;
-            border-radius: 8px;
-            margin-right: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
             background: #ffffff;
             border: 2px solid #333333;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8em;
+            font-size: 1.2em;
             flex-shrink: 0;
+            overflow: hidden;
         }
 
         .product-info {
             flex: 1;
-            margin-right: 20px;
+            min-width: 0;
         }
 
         .product-name {
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: 600;
             color: #333333;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .product-description {
             color: #666666;
-            font-size: 0.9em;
-            line-height: 1.4;
+            font-size: 0.85em;
+            line-height: 1.3;
         }
 
         .quantity-control {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             flex-shrink: 0;
         }
 
         .quantity-btn {
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             border: 2px solid #333333;
-            border-radius: 6px;
+            border-radius: 4px;
             background: #ffffff;
             color: #333333;
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -231,14 +259,14 @@
         }
 
         .quantity-display {
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: 600;
             color: #333333;
-            min-width: 32px;
+            min-width: 24px;
             text-align: center;
             background: #f8f9fa;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 4px 8px;
+            border-radius: 4px;
             border: 2px solid #333333;
         }
 
@@ -644,14 +672,19 @@
             let html = '';
 
             for (const [categoryName, products] of Object.entries(state.products)) {
+                const categoryId = categoryName.toLowerCase().replace(/[^a-z0-9]/g, '-');
                 html += `<div class="menu-section">
-                    <div class="category-title">${categoryName}</div>`;
+                    <div class="category-title" data-category="${categoryId}">${categoryName}</div>
+                    <div class="category-content" id="category-${categoryId}">`;
                 
                 products.forEach(product => {
                     // Determine what to show in the product image area
                     let imageContent;
                     if (product.imageUrl && product.imageUrl.trim() !== '') {
                         let imageUrl = product.imageUrl.trim();
+                        
+                        // Clean up the URL - remove any quotes or extra whitespace
+                        imageUrl = imageUrl.replace(/["']/g, '').trim();
                         
                         // Convert Google Drive view URL to direct image URL if needed
                         if (imageUrl.includes('drive.google.com/file/d/')) {
@@ -661,13 +694,13 @@
                             }
                         }
                         
-                        // Clean up the URL encoding if needed
-                        imageUrl = encodeURI(decodeURI(imageUrl));
+                        console.log(`Processing image for ${product.name}: ${imageUrl}`);
                         
-                        imageContent = `<img src="${imageUrl}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;" 
-                                       onerror="console.log('Image failed to load: ${imageUrl}'); this.style.display='none'; this.nextElementSibling.style.display='flex';" 
-                                       onload="console.log('Image loaded successfully: ${imageUrl}')">
-                                       <div style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 1.8em;">${product.emoji}</div>`;
+                        imageContent = `<img src="${imageUrl}" alt="${product.name}" 
+                                       style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" 
+                                       onerror="console.error('Image failed to load: ${imageUrl}'); this.style.display='none'; this.nextElementSibling.style.display='flex';" 
+                                       onload="console.log('Image loaded: ${imageUrl}')">
+                                       <div style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 1.2em;">${product.emoji}</div>`;
                     } else {
                         imageContent = product.emoji;
                     }
@@ -680,7 +713,7 @@
                                 <div class="product-description">${product.description}</div>
                             </div>
                             <div class="quantity-control">
-                                <button type="button" class="quantity-btn" data-product-id="${product.id}" data-change="-1">-</button>
+                                <button type="button" class="quantity-btn" data-product-id="${product.id}" data-change="-1">−</button>
                                 <div class="quantity-display" id="${product.id}-qty">0</div>
                                 <button type="button" class="quantity-btn" data-product-id="${product.id}" data-change="1">+</button>
                             </div>
@@ -688,10 +721,27 @@
                     `;
                 });
                 
-                html += `</div>`;
+                html += `</div></div>`;
             }
 
             container.innerHTML = html;
+            
+            // Add event listeners to category titles for collapsing
+            document.querySelectorAll('.category-title').forEach(title => {
+                title.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const categoryId = this.getAttribute('data-category');
+                    const content = document.getElementById(`category-${categoryId}`);
+                    
+                    if (content.classList.contains('collapsed')) {
+                        content.classList.remove('collapsed');
+                        this.classList.remove('collapsed');
+                    } else {
+                        content.classList.add('collapsed');
+                        this.classList.add('collapsed');
+                    }
+                });
+            });
             
             // Add event listeners to quantity buttons
             document.querySelectorAll('.quantity-btn').forEach(button => {
