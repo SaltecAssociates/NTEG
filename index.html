@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #e8f5e8;
+            background: #1976d2;
             min-height: 100vh;
             padding: 20px;
         }
@@ -23,9 +23,15 @@
             margin: 0 auto;
             background: #ffffff;
             border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 128, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             overflow: hidden;
-            border: 3px solid #2e7d32;
+        }
+
+        .header {
+            background: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
         }
 
         .header {
@@ -36,6 +42,20 @@
         }
 
         .logo {
+            display: inline-block;
+            margin-bottom: 20px;
+            max-width: 300px;
+            max-height: 120px;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            max-height: 120px;
+            object-fit: contain;
+        }
+
+        .logo-text {
             background: white;
             color: #2e7d32;
             padding: 16px 32px;
@@ -151,6 +171,7 @@
             cursor: pointer;
             transition: background-color 0.2s ease;
             position: relative;
+            border-radius: 12px 12px 0 0;
         }
 
         .category-title:hover {
@@ -171,6 +192,11 @@
         .category-content {
             display: block;
             margin-bottom: 24px;
+            background: #ffffff;
+            border-radius: 0 0 12px 12px;
+            margin-left: -40px;
+            margin-right: -40px;
+            padding: 16px 40px 24px 40px;
         }
 
         .category-content.collapsed {
@@ -282,7 +308,7 @@
         }
 
         .item-count {
-            background: #2e7d32;
+            background: #1976d2;
             color: white;
             padding: 12px 24px;
             border-radius: 24px;
@@ -290,7 +316,7 @@
             font-weight: 600;
             margin-bottom: 24px;
             display: inline-block;
-            box-shadow: 0 4px 12px rgba(0, 128, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
         }
 
         .submit-btn {
@@ -373,8 +399,13 @@
     <div class="container">
         <div class="header">
             <div class="logo">
-                NTEG
-                <div class="logo-subtitle">DISTRIBUTION</div>
+                <!-- Replace the src with your actual logo URL -->
+                <img src="https://raw.githubusercontent.com/SaltecAssociates/NTEG/main/NTEG%20Dist%20logo_no%20hands.PNG" alt="NTEG Distribution Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+                <!-- Fallback text logo if image fails to load -->
+                <div class="logo-text" style="display: none;">
+                    NTEG
+                    <div class="logo-subtitle">DISTRIBUTION</div>
+                </div>
             </div>
             <h1>Order Form</h1>
             <p>Order quality supplies for your business</p>
