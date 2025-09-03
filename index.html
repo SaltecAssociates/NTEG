@@ -41,19 +41,16 @@
         }
 
         .logo {
-            max-width: 400px;
-            max-height: 120px;
-            margin: 0 auto 12px auto;
-            display: block;
+            max-width: 200px;
+            max-height: 60px;
+            margin-bottom: 8px;
         }
 
         .logo img {
             width: 100%;
             height: auto;
-            max-height: 120px;
+            max-height: 60px;
             object-fit: contain;
-            display: block;
-            margin: 0 auto;
         }
 
         .logo-text {
@@ -91,45 +88,44 @@
 
         .customer-info {
             background: #f8f9fa;
-            padding: 12px;
+            padding: 16px;
             border-radius: 8px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             border: 1px solid #dee2e6;
         }
 
         .customer-info h3 {
             color: #333;
-            margin-bottom: 12px;
-            font-size: 1em;
+            margin-bottom: 16px;
+            font-size: 1.1em;
             font-weight: 600;
-            text-align: center;
         }
 
         .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
         .form-group {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
             color: #333;
             font-weight: 500;
-            font-size: 0.8em;
+            font-size: 0.9em;
         }
 
         .form-group input {
             width: 100%;
-            padding: 8px;
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            border-radius: 6px;
+            font-size: 16px;
             background: #fff;
             transition: border-color 0.2s ease;
         }
@@ -472,98 +468,9 @@
             loading: false
         };
 
-        // Local Storage Functions
-        function saveFormData() {
-            const formData = {
-                customerName: document.getElementById('customerName').value,
-                companyName: document.getElementById('companyName').value,
-                customerPhone: document.getElementById('customerPhone').value,
-                customerEmail: document.getElementById('customerEmail').value,
-                deliveryAddress: document.getElementById('deliveryAddress').value,
-                deliveryCity: document.getElementById('deliveryCity').value,
-                deliveryState: document.getElementById('deliveryState').value,
-                deliveryZip: document.getElementById('deliveryZip').value,
-                quantities: { ...state.quantities },
-                lastSaved: new Date().toISOString()
-            };
-            
-            try {
-                localStorage.setItem('nteg_form_data', JSON.stringify(formData));
-                debug('Form data saved to localStorage');
-            } catch (error) {
-                debug('Failed to save form data to localStorage:', error);
-            }
-        }
-
-        function loadFormData() {
-            try {
-                const savedData = localStorage.getItem('nteg_form_data');
-                if (!savedData) return null;
-                
-                const formData = JSON.parse(savedData);
-                debug('Form data loaded from localStorage:', formData);
-                
-                // Check if data is older than 30 days
-                const lastSaved = new Date(formData.lastSaved);
-                const now = new Date();
-                const daysDiff = (now - lastSaved) / (1000 * 60 * 60 * 24);
-                
-                if (daysDiff > 30) {
-                    debug('Saved data is older than 30 days, clearing it');
-                    localStorage.removeItem('nteg_form_data');
-                    return null;
-                }
-                
-                return formData;
-            } catch (error) {
-                debug('Failed to load form data from localStorage:', error);
-                localStorage.removeItem('nteg_form_data');
-                return null;
-            }
-        }
-
-        function restoreFormData(formData) {
-            if (!formData) return;
-            
-            // Restore business information
-            const fields = [
-                'customerName', 'companyName', 'customerPhone', 'customerEmail',
-                'deliveryAddress', 'deliveryCity', 'deliveryState', 'deliveryZip'
-            ];
-            
-            fields.forEach(fieldId => {
-                const element = document.getElementById(fieldId);
-                if (element && formData[fieldId]) {
-                    element.value = formData[fieldId];
-                }
-            });
-            
-            // Restore quantities if products are loaded
-            if (formData.quantities && Object.keys(state.products).length > 0) {
-                for (const [productId, quantity] of Object.entries(formData.quantities)) {
-                    if (quantity > 0 && state.quantities.hasOwnProperty(productId)) {
-                        state.quantities[productId] = quantity;
-                        const element = document.getElementById(productId + '-qty');
-                        if (element) {
-                            element.textContent = quantity;
-                        }
-                    }
-                }
-                updateTotalItems();
-            }
-            
-            debug('Form data restored successfully');
-        }
-
-        function showRestorePrompt(formData) {
-            const lastSaved = new Date(formData.lastSaved).toLocaleDateString();
-            const message = `Found saved information from ${lastSaved}. Would you like to restore your previous order?`;
-            
-            if (confirm(message)) {
-                restoreFormData(formData);
-                showMessage('Previous order information restored!', 'success');
-            } else {
-                localStorage.removeItem('nteg_form_data');
+        function debug(message, data = null) {
+            if (CONFIG.DEBUG) {
+                console.log(`[DEBUG] ${message}`, data || '');
             }
         }
 
@@ -623,10 +530,6 @@
                     throw new Error('Empty CSV response');
                 }
                 
-                if (csvText.trim().startsWith('<!DOCTYPE') || csvText.trim().startsWith('<html')) {
-                    throw new Error('Received HTML instead of CSV - check Google Sheets permissions');
-                }
-                
                 const products = parseCSV(csvText);
                 
                 if (Object.keys(products).length === 0) {
@@ -636,12 +539,10 @@
                 state.products = products;
                 initializeQuantities();
                 renderProducts();
-                return true; // Success
                 
             } catch (error) {
                 debug('Product load failed:', error.message);
                 loadDefaultProducts();
-                return false; // Failed, using defaults
             }
         }
 
@@ -719,6 +620,8 @@
 
         function loadDefaultProducts() {
             debug('Loading default products...');
+            container.innerHTML = '<div class="loading">Loading default products...</div>';
+            
             state.products = {
                 "GLOVES": [
                     {
@@ -734,12 +637,58 @@
                         description: "S-M-L-XL (1000/case)",
                         emoji: "🧤",
                         imageUrl: "https://raw.githubusercontent.com/SaltecAssociates/NTEG/main/images/Nitrile%20Gloves.png"
+                    },
+                    {
+                        id: "clear-vinyl-gloves",
+                        name: "Clear Vinyl Gloves",
+                        description: "S-M-L-XL (1000/case)",
+                        emoji: "🧤",
+                        imageUrl: ""
+                    }
+                ],
+                "TO-GO CONTAINERS": [
+                    {
+                        id: "foam-9x9-white",
+                        name: "9x9 White Single Container",
+                        description: "Foam Containers (White) - 200/case",
+                        emoji: "📦",
+                        imageUrl: ""
+                    },
+                    {
+                        id: "foam-9x9-black",
+                        name: "9x9 Black Single Container", 
+                        description: "Foam Containers (Black) - 200/case",
+                        emoji: "📦",
+                        imageUrl: ""
+                    }
+                ],
+                "PAPER PRODUCTS": [
+                    {
+                        id: "paper-towels-kitchen",
+                        name: "Tall Kitchen Paper Towels",
+                        description: "30 rolls/case",
+                        emoji: "🧻",
+                        imageUrl: ""
+                    },
+                    {
+                        id: "napkins-white",
+                        name: "White Beverage Napkins",
+                        description: "4000/case",
+                        emoji: "🧻",
+                        imageUrl: ""
                     }
                 ]
             };
             
             initializeQuantities();
             renderProducts();
+            
+            setTimeout(() => {
+                container.innerHTML = container.innerHTML.replace(
+                    '<div class="loading">Loading default products...</div>',
+                    '<div class="message error">Using default products. Check Google Sheets connection.</div>'
+                );
+            }, 1000);
         }
 
         function initializeQuantities() {
@@ -911,9 +860,6 @@
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Sending...';
                 
-                // Save current form data before submitting
-                saveFormData();
-                
                 updateHiddenFields();
                 
                 const formData = new FormData(form);
@@ -930,8 +876,7 @@
 
                 if (response.ok) {
                     showMessage('Order submitted successfully! We will contact you shortly.', 'success');
-                    // Keep business info but reset quantities
-                    resetQuantities();
+                    resetForm();
                 } else {
                     throw new Error(`Email failed: ${response.status}`);
                 }
@@ -946,21 +891,7 @@
             }
         }
 
-        function resetQuantities() {
-            // Reset only quantities, keep business information
-            for (const productId in state.quantities) {
-                state.quantities[productId] = 0;
-                const element = document.getElementById(productId + '-qty');
-                if (element) element.textContent = '0';
-            }
-            updateTotalItems();
-            
-            // Update localStorage with reset quantities
-            saveFormData();
-        }
-
         function resetForm() {
-            // Full reset including business information
             for (const productId in state.quantities) {
                 state.quantities[productId] = 0;
                 const element = document.getElementById(productId + '-qty');
@@ -973,9 +904,6 @@
             });
             
             updateTotalItems();
-            
-            // Clear localStorage
-            localStorage.removeItem('nteg_form_data');
         }
 
         // Initialize the application
@@ -983,50 +911,26 @@
             const form = document.getElementById('orderForm');
             form.addEventListener('submit', submitOrder);
             
-            // Input formatting and validation with auto-save
+            // Input formatting and validation
             document.getElementById('customerPhone').addEventListener('input', function() {
                 formatPhoneNumber(this);
                 updateTotalItems();
-                saveFormData();
             });
             
             document.getElementById('deliveryState').addEventListener('input', function() {
                 formatState(this);
                 updateTotalItems();
-                saveFormData();
             });
             
             document.getElementById('deliveryZip').addEventListener('input', function() {
                 formatZipCode(this);
                 updateTotalItems();
-                saveFormData();
             });
             
-            // Auto-save on all input changes
-            ['customerName', 'companyName', 'customerEmail', 'deliveryAddress', 'deliveryCity'].forEach(id => {
-                document.getElementById(id).addEventListener('input', function() {
-                    updateTotalItems();
-                    saveFormData();
-                });
+            ['customerName', 'companyName', 'deliveryAddress', 'deliveryCity'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateTotalItems);
             });
             
-            // Load saved form data (business info only)
-            const savedData = loadFormData();
-            if (savedData) {
-                const fields = [
-                    'customerName', 'companyName', 'customerPhone', 'customerEmail',
-                    'deliveryAddress', 'deliveryCity', 'deliveryState', 'deliveryZip'
-                ];
-                
-                fields.forEach(fieldId => {
-                    const element = document.getElementById(fieldId);
-                    if (element && savedData[fieldId]) {
-                        element.value = savedData[fieldId];
-                    }
-                });
-            }
-            
-            // Load products
             loadProducts();
         });
     </script>
