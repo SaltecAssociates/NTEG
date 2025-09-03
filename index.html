@@ -472,9 +472,98 @@
             loading: false
         };
 
-        function debug(message, data = null) {
-            if (CONFIG.DEBUG) {
-                console.log(`[DEBUG] ${message}`, data || '');
+        // Local Storage Functions
+        function saveFormData() {
+            const formData = {
+                customerName: document.getElementById('customerName').value,
+                companyName: document.getElementById('companyName').value,
+                customerPhone: document.getElementById('customerPhone').value,
+                customerEmail: document.getElementById('customerEmail').value,
+                deliveryAddress: document.getElementById('deliveryAddress').value,
+                deliveryCity: document.getElementById('deliveryCity').value,
+                deliveryState: document.getElementById('deliveryState').value,
+                deliveryZip: document.getElementById('deliveryZip').value,
+                quantities: { ...state.quantities },
+                lastSaved: new Date().toISOString()
+            };
+            
+            try {
+                localStorage.setItem('nteg_form_data', JSON.stringify(formData));
+                debug('Form data saved to localStorage');
+            } catch (error) {
+                debug('Failed to save form data to localStorage:', error);
+            }
+        }
+
+        function loadFormData() {
+            try {
+                const savedData = localStorage.getItem('nteg_form_data');
+                if (!savedData) return null;
+                
+                const formData = JSON.parse(savedData);
+                debug('Form data loaded from localStorage:', formData);
+                
+                // Check if data is older than 30 days
+                const lastSaved = new Date(formData.lastSaved);
+                const now = new Date();
+                const daysDiff = (now - lastSaved) / (1000 * 60 * 60 * 24);
+                
+                if (daysDiff > 30) {
+                    debug('Saved data is older than 30 days, clearing it');
+                    localStorage.removeItem('nteg_form_data');
+                    return null;
+                }
+                
+                return formData;
+            } catch (error) {
+                debug('Failed to load form data from localStorage:', error);
+                localStorage.removeItem('nteg_form_data');
+                return null;
+            }
+        }
+
+        function restoreFormData(formData) {
+            if (!formData) return;
+            
+            // Restore business information
+            const fields = [
+                'customerName', 'companyName', 'customerPhone', 'customerEmail',
+                'deliveryAddress', 'deliveryCity', 'deliveryState', 'deliveryZip'
+            ];
+            
+            fields.forEach(fieldId => {
+                const element = document.getElementById(fieldId);
+                if (element && formData[fieldId]) {
+                    element.value = formData[fieldId];
+                }
+            });
+            
+            // Restore quantities if products are loaded
+            if (formData.quantities && Object.keys(state.products).length > 0) {
+                for (const [productId, quantity] of Object.entries(formData.quantities)) {
+                    if (quantity > 0 && state.quantities.hasOwnProperty(productId)) {
+                        state.quantities[productId] = quantity;
+                        const element = document.getElementById(productId + '-qty');
+                        if (element) {
+                            element.textContent = quantity;
+                        }
+                    }
+                }
+                updateTotalItems();
+            }
+            
+            debug('Form data restored successfully');
+        }
+
+        function showRestorePrompt(formData) {
+            const lastSaved = new Date(formData.lastSaved).toLocaleDateString();
+            const message = `Found saved information from ${lastSaved}. Would you like to restore your previous order?`;
+            
+            if (confirm(message)) {
+                restoreFormData(formData);
+                showMessage('Previous order information restored!', 'success');
+            } else {
+                localStorage.removeItem('nteg_form_data');
             }
         }
 
@@ -752,6 +841,7 @@
                             qtyElement.textContent = newQuantity;
                         }
                         updateTotalItems();
+                        saveFormData(); // Auto-save when quantities change
                     }
                 });
             });
@@ -807,6 +897,9 @@
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Sending...';
                 
+                // Save current form data before submitting
+                saveFormData();
+                
                 updateHiddenFields();
                 
                 const formData = new FormData(form);
@@ -823,7 +916,8 @@
 
                 if (response.ok) {
                     showMessage('Order submitted successfully! We will contact you shortly.', 'success');
-                    resetForm();
+                    // Keep business info but reset quantities
+                    resetQuantities();
                 } else {
                     throw new Error(`Email failed: ${response.status}`);
                 }
@@ -838,7 +932,21 @@
             }
         }
 
+        function resetQuantities() {
+            // Reset only quantities, keep business information
+            for (const productId in state.quantities) {
+                state.quantities[productId] = 0;
+                const element = document.getElementById(productId + '-qty');
+                if (element) element.textContent = '0';
+            }
+            updateTotalItems();
+            
+            // Update localStorage with reset quantities
+            saveFormData();
+        }
+
         function resetForm() {
+            // Full reset including business information
             for (const productId in state.quantities) {
                 state.quantities[productId] = 0;
                 const element = document.getElementById(productId + '-qty');
@@ -851,6 +959,9 @@
             });
             
             updateTotalItems();
+            
+            // Clear localStorage
+            localStorage.removeItem('nteg_form_data');
         }
 
         // Initialize the application
@@ -858,26 +969,41 @@
             const form = document.getElementById('orderForm');
             form.addEventListener('submit', submitOrder);
             
-            // Input formatting and validation
+            // Input formatting and validation with auto-save
             document.getElementById('customerPhone').addEventListener('input', function() {
                 formatPhoneNumber(this);
                 updateTotalItems();
+                saveFormData();
             });
             
             document.getElementById('deliveryState').addEventListener('input', function() {
                 formatState(this);
                 updateTotalItems();
+                saveFormData();
             });
             
             document.getElementById('deliveryZip').addEventListener('input', function() {
                 formatZipCode(this);
                 updateTotalItems();
+                saveFormData();
             });
             
-            ['customerName', 'companyName', 'deliveryAddress', 'deliveryCity'].forEach(id => {
-                document.getElementById(id).addEventListener('input', updateTotalItems);
+            // Auto-save on all input changes
+            ['customerName', 'companyName', 'customerEmail', 'deliveryAddress', 'deliveryCity'].forEach(id => {
+                document.getElementById(id).addEventListener('input', function() {
+                    updateTotalItems();
+                    saveFormData();
+                });
             });
             
+            // Load saved data first
+            const savedData = loadFormData();
+            if (savedData) {
+                // Show restore prompt after a brief delay to ensure page is fully loaded
+                setTimeout(() => showRestorePrompt(savedData), 500);
+            }
+            
+            // Then load products
             loadProducts();
         });
     </script>
