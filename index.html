@@ -623,6 +623,10 @@
                     throw new Error('Empty CSV response');
                 }
                 
+                if (csvText.trim().startsWith('<!DOCTYPE') || csvText.trim().startsWith('<html')) {
+                    throw new Error('Received HTML instead of CSV - check Google Sheets permissions');
+                }
+                
                 const products = parseCSV(csvText);
                 
                 if (Object.keys(products).length === 0) {
@@ -632,10 +636,12 @@
                 state.products = products;
                 initializeQuantities();
                 renderProducts();
+                return true; // Success
                 
             } catch (error) {
                 debug('Product load failed:', error.message);
                 loadDefaultProducts();
+                return false; // Failed, using defaults
             }
         }
 
@@ -714,16 +720,24 @@
         function loadDefaultProducts() {
             debug('Loading default products...');
             state.products = {
-                "Safety & Protection": [
+                "GLOVES": [
                     {
-                        id: "nitrile-gloves",
-                        name: "Disposable Nitrile Gloves",
-                        description: "Powder-free, latex-free (Box of 100)",
+                        id: "black-nitrile-3mil",
+                        name: "Black Nitrile 3mil Gloves",
+                        description: "S-M-L-XL (1000/case)",
                         emoji: "🧤",
                         imageUrl: ""
+                    },
+                    {
+                        id: "blue-nitrile-3mil",
+                        name: "Blue Nitrile 3mil Gloves", 
+                        description: "S-M-L-XL (1000/case)",
+                        emoji: "🧤",
+                        imageUrl: "https://raw.githubusercontent.com/SaltecAssociates/NTEG/main/images/Nitrile%20Gloves.png"
                     }
                 ]
             };
+            
             initializeQuantities();
             renderProducts();
         }
@@ -996,14 +1010,23 @@
                 });
             });
             
-            // Load saved data first
+            // Load saved form data (business info only)
             const savedData = loadFormData();
             if (savedData) {
-                // Show restore prompt after a brief delay to ensure page is fully loaded
-                setTimeout(() => showRestorePrompt(savedData), 500);
+                const fields = [
+                    'customerName', 'companyName', 'customerPhone', 'customerEmail',
+                    'deliveryAddress', 'deliveryCity', 'deliveryState', 'deliveryZip'
+                ];
+                
+                fields.forEach(fieldId => {
+                    const element = document.getElementById(fieldId);
+                    if (element && savedData[fieldId]) {
+                        element.value = savedData[fieldId];
+                    }
+                });
             }
             
-            // Then load products
+            // Load products
             loadProducts();
         });
     </script>
