@@ -744,12 +744,25 @@
                         imageContent = product.emoji;
                     }
                     
+                    let sizeDropdown = '';
+                    if (product.sizes && product.sizes.length > 0) {
+                        sizeDropdown = `
+                            <div class="size-dropdown">
+                                <select id="${product.id}-size" data-product-id="${product.id}">
+                                    <option value="">Select Size</option>
+                                    ${product.sizes.map(size => `<option value="${size}">${size}</option>`).join('')}
+                                </select>
+                            </div>
+                        `;
+                    }
+                    
                     html += `
                         <div class="product-item">
                             <div class="product-image">${imageContent}</div>
                             <div class="product-info">
                                 <div class="product-name">${product.name}</div>
                                 <div class="product-description">${product.description}</div>
+                                ${sizeDropdown}
                             </div>
                             <div class="quantity-control">
                                 <button type="button" class="quantity-btn" data-product-id="${product.id}" data-change="-1">−</button>
