@@ -845,7 +845,15 @@
             
             for (const [productId, quantity] of Object.entries(state.quantities)) {
                 if (quantity > 0) {
-                    const itemLine = `${state.productNames[productId]}: ${quantity}`;
+                    let productName = state.productNames[productId];
+                    
+                    // Check if this product has a size/color selection
+                    const sizeElement = document.getElementById(productId + '-size');
+                    if (sizeElement && sizeElement.value) {
+                        productName += ` (${sizeElement.value})`;
+                    }
+                    
+                    const itemLine = `${productName}: ${quantity}`;
                     orderItems.push(itemLine);
                     orderSummary += `${itemLine}\n`;
                     totalItems += quantity;
